@@ -1,0 +1,12 @@
+# GetGuiElementValue
+# admin, last change: 2025-03-25 13:28:31
+
+Sub function $GUIElement $Element
+
+  Management.web.gui_element[{$GUIElement}].value %
+  $Read={$cli}
+  
+  replace $Read= $Read, ":", "," , 1, All
+  list get $ReadElement = $Read, $Element
+
+endsub $ReadElement

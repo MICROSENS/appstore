@@ -1,21 +1,21 @@
-AirHandleUnit:Adjust_Diagram_Limits "OutsiteTemp"
 # AirHandleUnit
 # admin, last change: 2025-03-24 13:45:17
-
-gosub Adjust_Diagram_Limits OutsiteTemp
 
 Sub AHUAutoMan
   echo console on
   dump event
 
-  gosub ReadConfig "BTN_ClimateOnOff" 1 return $auto
-  gosub ReadConfig "BTN_ClimateOnOff" 2 return $man
+  $BTN_Name = "BTN_ClimateONOff"
+  $BTN_Attribut = "BUTTON"
+  $INST = 1
+
+  append $BTN_Climate=$BTN_Name + ":" + $INST + ":" + $BTN_Attribut
+
+  gosub GetGuiElementValue/function $BTN_Name 1 return $auto
+  gosub GetGuiElementValue/function $BTN_Name 2 return $man
 
   console "Read Config GUI Element - Auto Attribut " $auto
   console "Read Config GUI Element - Manual Attribut " $man
-
-
-  $BTN_Climate = "BTN_ClimateONOff:1:BUTTON"
 
   read gui $ClimateONOff $BTN_Climate
 
@@ -25,32 +25,17 @@ Sub AHUAutoMan
     gosub SetMan 1
   else
     console "Fehler in der Config"
-  endif
-
-  dump var
-  
+  endif  
 endsub
 
 Sub SetMan $Zone
   App.smartdirector.climate_config[{$Zone}].manual_override = Enabled
   gosub GUItoValve $Zone
-
 endSub
 
 Sub SetAuto $Zone
   App.smartdirector.climate_config[{$Zone}].manual_override = Disable
-
 endSub
-
-Sub ReadConfig $GUIElement $Element
-
-  Management.web.gui_element[{$GUIElement}].value %
-  $Read={$cli}
-  
-  replace $Read= $Read, ":", "," , 1, All
-  list get $ReadElement = $Read, $Element
-
-endsub $ReadElement
 
 sub GUItoValve $Zone
   read gui $ValvePerc "SLD_CoolingValve:1:SLIDER"
@@ -58,43 +43,26 @@ sub GUItoValve $Zone
 
   read gui $ValvePerc "SLD_HeaterValve:1:SLIDER"
   App.smartdirector.climate_config[{$Zone}].manual_heating_value = {$ValvePerc}
-
 endsub
 
-Sub Scheduler $SwitchTo
-  write gui $SwitchTo "BTN_ClimateMode_1:1:BUTTON"
-  echo console on
-  dump event
-  dump var
+sub adjustPID $Zone
+  read gui $pconst "SLD_Controller_P:1:SLIDER"
+  read gui $iconst "SLD_Controller_I:1:SLIDER"
+  read gui $dconst "SLD_Controller_D:1:SLIDER"
 
+  tofloat $pconst
+  tofloat $iconst
+  tofloat $dconst
+
+  $pconst=$pconst / 10
+  $iconst=$iconst / 10
+  $dconst=$dconst / 10
+
+  tostring $pconst
+  tostring $iconst
+  tostring $dconst
+
+  append $pid_constants=$pconst + " : " + $iconst + " : " + $dconst
+
+  App.smartdirector.climate_config[{$Zone}].pid_constants = {$pid_constants}
 endsub
-
-Sub Adjust_Diagram_Limits $Table
-  gosub GetExtremes $Table return $Min $Max
-  gosub WriteConfig "DIA_OutsideTemp_Day" $Min $Max
-
-endsub
-
-sub GetExtremes $Table
-  Management.logging.history_records[{$Table}].last_day %
-  string $ValueList "{$cli}"
- 
-  $Max=0
-  $Min=100
-  loop $Val for each item of list $ValueList
-      intval $CheckVal $Val
-      # dump $CheckVal
-      if $CheckVal>$Max then $Max=$CheckVal
-      if $CheckVal<$Min then $Min=$CheckVal
-  endloop
-endsub $Min $Max
-
-sub WriteConfig $Element $Min $Max
-  echo console on
-  if $Min >0 then $Min=0
-  if $Max <0 then $Max=0
-  append $Value=$Min + ", " + $Max
-  Management.web.gui_element[{$Element}].value = {$Value}
-  dump var
-
-endSub

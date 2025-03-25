@@ -1,0 +1,12 @@
+- frage guiseiten Ab
+    sind Seitennamen vorhanden die hier gebraucht werden?
+- frage GUI elemente Ab
+    sind elemente vorhanden die gebraucht werden?
+- frag gui styles ab
+    sind styles vorhanden, die gebraucht werden?
+- frage scriptfile namen ab
+    sind namen bereits benutzt?
+- frage logging einträge ab
+    sind bereits logings benutzt?
+- frage cronjob einträge ab
+    sind bereits jobs mit dem selben namen eingetragen?

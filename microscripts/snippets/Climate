@@ -1,0 +1,6 @@
+# Climate
+# admin, last change: 2025-03-25 13:35:34
+
+Sub Scheduler $SwitchTo
+  write gui $SwitchTo "BTN_ClimateMode_1:1:BUTTON"
+endsub
