@@ -17,6 +17,11 @@ sub main $Element $Min $Max
   # Round to nearst 10
   endif
 
+  if $Min=0 and $Max=0 then
+    $Min=0
+    $Max=100
+  endif
+
   append $Value=$Min + ", " + $Max
   Management.web.gui_element[{$Element}].value = {$Value}
   dump var

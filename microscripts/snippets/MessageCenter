@@ -1,0 +1,19 @@
+# MessageCenter
+# admin, last change: 2025-03-26 11:52:38
+
+Sub SentMessage $Inst $Message
+  $Sensor="MessageCenter:{$Inst}:Message"
+#  $OnPages="SceneControl,ServiceMain"
+
+  get sensor index $ix $Sensor
+  if $ix = 0 then
+    register sensor $Sensor {$Message} ""
+  else
+    write sensor " " $Sensor
+    write sensor $Message $Sensor
+  endif
+
+#  loop $Page for each item of List $OnPages
+#    write gui "refresh" {$Page}:1:COMMAND
+#  endloop
+endSub

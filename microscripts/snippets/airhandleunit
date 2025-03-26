@@ -2,13 +2,10 @@
 # admin, last change: 2025-03-24 13:45:17
 
 Sub AHUAutoMan
-  echo console on
-  dump event
-
   $BTN_Name = "BTN_ClimateONOff"
   $BTN_Attribut = "BUTTON"
   $INST = 1
-
+  
   append $BTN_Climate=$BTN_Name + ":" + $INST + ":" + $BTN_Attribut
 
   gosub GetGuiElementValue/function $BTN_Name 1 return $auto
@@ -21,28 +18,37 @@ Sub AHUAutoMan
 
   if $ClimateONOff = $auto
     gosub SetAuto 1
-  elseif $ClimateONOff = $man then
+  elseif $ClimateONOff = $man
     gosub SetMan 1
   else
-    console "Fehler in der Config"
+    $Message="Error in Config"
+    gosub MessageCenter/SentMessage 1 $Message
   endif  
 endsub
 
 Sub SetMan $Zone
   App.smartdirector.climate_config[{$Zone}].manual_override = Enabled
+  $Message="Set Mode to Manual"
+  gosub MessageCenter/SentMessage 1 $Message
   gosub GUItoValve $Zone
 endSub
 
 Sub SetAuto $Zone
   App.smartdirector.climate_config[{$Zone}].manual_override = Disable
+  $Message="Set Mode to Auto"
+  gosub MessageCenter/SentMessage 1 $Message
 endSub
 
 sub GUItoValve $Zone
+  $Message="Set Manuel Value to Valves"
   read gui $ValvePerc "SLD_CoolingValve:1:SLIDER"
   App.smartdirector.climate_config[{$Zone}].manual_cooling_value = {$ValvePerc}
-
+  append $Message=$Message + " Cooling: " + $ValvePerc
   read gui $ValvePerc "SLD_HeaterValve:1:SLIDER"
+  append $Message=$Message + ", Heating: " + $ValvePerc
   App.smartdirector.climate_config[{$Zone}].manual_heating_value = {$ValvePerc}
+  
+  gosub MessageCenter/SentMessage 1 $Message
 endsub
 
 sub adjustPID $Zone
@@ -65,4 +71,8 @@ sub adjustPID $Zone
   append $pid_constants=$pconst + " : " + $iconst + " : " + $dconst
 
   App.smartdirector.climate_config[{$Zone}].pid_constants = {$pid_constants}
+  
+  $Message="Set PID Parameters"
+  append $Message=$Message + " " + $pid_constants
+  gosub MessageCenter/SentMessage 1 $Message
 endsub

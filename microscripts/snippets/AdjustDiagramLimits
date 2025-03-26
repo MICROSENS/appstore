@@ -5,4 +5,9 @@ Sub main $Table $GUIElement
   gosub GetTableExtremes/main $Table return $Min $Max
   gosub SetGuiElementValue/main $GUIElement $Min $Max
 
+  gosub GetGuiElementPage/main $GUIElement 1 return $Page
+  write gui "refresh" {$Page}:1:COMMAND
+  
+  $Message="Adjust Diagram Limit config and refreshing page"
+  gosub MessageCenter/SentMessage 1 $Message
 endsub
