@@ -1,0 +1,18 @@
+# _git
+# admin, last change: 2025-03-27 14:27:39
+
+
+#credentials
+$ip="raw.githubusercontent.com"
+$base="/MICROSENS/appstore/refs/heads/main/"
+$folder="microscripts/snippets/"
+
+$file="airhandleunit"
+ 
+#pull file from github
+$url=" -k -s https://" $ip $base $folder $file
+out $url
+curl $url $Response
+ 
+out $Response
+end
