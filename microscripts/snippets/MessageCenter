@@ -16,4 +16,8 @@ Sub SentMessage $Inst $Message
 #  loop $Page for each item of List $OnPages
 #    write gui "refresh" {$Page}:1:COMMAND
 #  endloop
+
+
+start timer "clear_message_box" in "30s" MessageCenter/SentMessage 1 " "
+
 endSub

@@ -8,6 +8,6 @@ Sub main $Table $GUIElement
   gosub GetGuiElementPage/main $GUIElement 1 return $Page
   write gui "refresh" {$Page}:1:COMMAND
   
-  $Message="Adjust Diagram Limit config and refreshing page"
+  $Message="Adjust Diagram config {$GUIElement} \n {$Min} {$Max}"
   gosub MessageCenter/SentMessage 1 $Message
 endsub

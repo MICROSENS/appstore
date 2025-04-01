@@ -2,7 +2,6 @@
 # admin, last change: 2025-03-25 13:23:41
 
 sub main $Element $Min $Max
-  echo console on
   
   # Anpassen der Grenzen (Aufrunden und auf Nullline legen)
   if $Min >0 then
@@ -24,6 +23,5 @@ sub main $Element $Min $Max
 
   append $Value=$Min + ", " + $Max
   Management.web.gui_element[{$Element}].value = {$Value}
-  dump var
 
 endSub
