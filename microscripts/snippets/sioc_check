@@ -1,0 +1,40 @@
+# sioc_check
+# admin, last change: 2025-04-01 14:12:40
+
+
+# --->> Aktuell noch nicht fertig! 
+echo console on
+# dump var
+# dump event
+
+Device.SmartOffice.sensor_list[SIOC_1:1:DIN].value %
+$SIOC_1={$cli}
+
+Device.SmartOffice.sensor_list[SIOC_2:1:DIN].value %
+$SIOC_2={$cli}
+
+# Wo wird den geprüft, ob nun ein wechsel stattgefunden hat?
+if $SIOC_1 == $SIOC_2
+  console "Both Inputs are equal - start with Input 1 = 1"
+  $SIOC_1 = "1"
+  $SIOC_2 = "0"
+endif
+
+wait 5
+
+write actor $SIOC_1 "SIOC_1:1:DOUT"
+write actor $SIOC_2 "SIOC_2:1:DOUT"
+
+if $SIOC_1 == "1"
+    $Message="SIOC_1 Com Error"
+else
+    $Message="SIOC_2 Com Error"
+endif
+
+console "Restart Error Message Timer (20s)"
+restart timer "sioc_nok"
+
+# Wo soll denn der Timer gestartet werden ?!?!?
+start timer "sioc_nok" in "20s" MessageCenter/SentMessage 1 $Message
+
+dump var
