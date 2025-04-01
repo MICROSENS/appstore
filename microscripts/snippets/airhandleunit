@@ -11,8 +11,8 @@ Sub AHUAutoMan
   gosub GetGuiElementValue/function $BTN_Name 1 return $auto
   gosub GetGuiElementValue/function $BTN_Name 2 return $man
 
-  console "Read Config GUI Element - Auto Attribut " $auto
-  console "Read Config GUI Element - Manual Attribut " $man
+  # console "Read Config GUI Element - Auto Attribut " $auto
+  # console "Read Config GUI Element - Manual Attribut " $man
 
   read gui $ClimateONOff $BTN_Climate
 
