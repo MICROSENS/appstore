@@ -1,0 +1,162 @@
+# MessageDecoder
+# admin, last change: 2025-06-17 17:21:21
+
+
+gosub init
+$par=C3
+gosub JSON $par
+end
+
+sub JSON $JSON
+    echo console on
+    console "Subroutine started {$subroutine} " $JSON
+    debug "{$yellow}Decode JSON. Response: " $JSON "{$normal}"
+
+    #--- check syntax
+    # for each "{" has to be there a "}"
+    
+    #--- check for empty JSON
+    if $JSON = "" then 
+        console "No Conntent in JSON"
+        endsub
+    endif
+
+    #--- check for changes
+    find $Begin $JSON "AnythingChanged"":false" 1,E
+    if $Begin>1 then
+        console "Nothing changed"
+        endsub
+    endif
+
+    #--- remove spaces in JSON
+    # Mal ist ein Leerzeichen da mal nicht... Ist es zu Zeitaufwendig?
+    # replace $ObjectName = $ObjectName, " ", "", 1, ALL # remove all spaces
+
+    #--- Read Objectname
+    find $Colon $JSON ":" 1,E
+    extract $ObjectName = $JSON 1 $Colon O # Extract Object Name
+    replace $ObjectName = $ObjectName, " ", "", 1, ALL # remove all spaces
+    replace $ObjectName = $ObjectName, """", "", 1, ALL # remove all quotes
+    strlen $StringLenght=$ObjectName
+    $StringLenght=$StringLenght-1
+    extract $ObjectName = $ObjectName 2 $StringLenght O # Object Name without "{" and ":"
+
+    #--- check for nested objects
+    $NewObject=0
+    find $NewObject $JSON "{" 2,E # search for curly brackets to assume a nested object
+    if $NewObject>1 then
+        console "Nested Object in JSON found starting with Position" $NewObject ", ObjectName; " $ObjectName
+        find $EndNewObject $JSON "}" 2,E
+        $NewObject = $NewObject - 1                                 # including curly brackets
+        $EndNewObject = $EndNewObject - $NewObject                  # EndNewObject is searched in JSON, not in NewJSON
+        extract $NewJSON = $JSON $NewObject $EndNewObject O
+        console "Found { } " $NewObject " " $EndNewObject # " Result: " $NewJSON
+        gosub {$filename}/{$subroutine} $NewJSON
+    endif
+
+    #--- check for array
+    # find "," and search in between for "[]"
+    # find $Comma $JSON "," $Colon,E
+    # find $SquareBracket $JSON $Colon,E
+    console "Check if Data is a Array"
+    replace $ObjectName = $JSON, " ", "", 1, ALL # remove all spaces
+
+    #--- check for JSON end
+    # find $EndJSON $JSON "}" 2,E
+    # strlen $StringLenght=$JSON
+    #if $EndJSON <> $StringLenght then
+    # -> noch ein Objekt gefunden!!! Schleife?!?
+
+
+
+    #--- check for data
+
+
+    # list of keywords that we understand
+    # $Key1 = "data,Exec_data" 
+    # $Key2 = "rule,Exec_Rule"
+    # $Key3 = "timestamp,Exec_Timestamp"
+    # $Key4 = "ip,Exec_IP"
+    # $Key5 = "count,Exec_Count"
+    # $NumKeys=1
+    #<----------------------------------
+
+    # $End=1 
+    # for $I=1 to $NumKeys
+    #     list get $Keyword $Key{$I},1 # get Keyword and Sub Name
+    # #	find $Begin $JSON "{$Keyword}"":" $End,E  #JSON is in order
+    # #    find $Begin $JSON "{$Keyword}"":" 1,E
+    #     find $Start $JSON $Keyword 1,E
+    #     find $Begin $JSON ":" $Start,E
+
+    #     if $Begin
+    #         find $End $JSON "," $Begin,B
+    #         if $End
+    #             $End=$End-1
+    #         else
+    #             find $End $JSON "}" $Begin,B
+    #             $End=$End-1
+    #         endif
+    #         extract $Result =  $JSON $Begin $End O
+    #         trim $Result
+    #     #	debug $Keyword "=" $Result
+    #         list get $Sub $Key{$I},2 # get subroutine 
+    #         gosub {$Sub} $Result
+    #     else
+    #         debug "Keyword " $Keyword " not found"
+    #     endif
+    # endloop
+    console "-- End {$subroutine} --"
+endsub
+
+sub init
+    echo console on
+    console "Subroutine started {$subroutine} "
+    Protocol.mqtt.topic_map[*].name % JSON
+    select {$MatchCount}
+        case 0
+            console "Create Topic Map Entry - JSON"
+            Protocol.mqtt.topic_map[*].name = JSON
+            Protocol.mqtt.topic_map[JSON].mode = SUBSCRIBE
+            Protocol.mqtt.topic_map[JSON].topic = state/f8:dc:7a:42:85:49/channels
+            Protocol.mqtt.topic_map[JSON].local_name = /{$filename}
+            Protocol.mqtt.topic_map[JSON].transformation = 
+            Protocol.mqtt.topic_map[JSON].quality_of_service = AT_LEAST_ONCE
+        case 1
+            console "Topic Map Entry found - JSON"
+        case *
+            console "Topic Map Entry Error!!!"
+    endselect
+endsub
+
+sub Exec_data $data
+    echo console on
+    console "Subroutine started {$subroutine} "
+    console $data
+endsub
+
+sub Exec_Rule $Rule
+    echo console on
+    console "Subroutine started {$subroutine} "
+    output $Rule
+	register sensor "PoepleCounter.1.COUNT" 0 ""
+endsub
+
+sub Exec_IP $IP
+    echo console on
+    console "Subroutine started {$subroutine} "
+    output "IP: " $IP
+endsub
+
+sub Exec_Timestamp $Val
+    echo console on
+    console "Subroutine started {$subroutine} "
+    output "Timestamp: " $Val
+endsub
+
+sub Exec_Count $Val
+    echo console on
+    console "Subroutine started {$subroutine} "
+    output "Poeple Count: " $Val
+	write sensor $Val "PoepleCounter.1.COUNT"
+endsub

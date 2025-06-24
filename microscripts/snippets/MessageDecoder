@@ -1,0 +1,109 @@
+# MessageDecoder
+# admin, last change: 2025-06-17 17:21:21
+
+
+gosub init
+$par=C3
+gosub JSON $par
+end
+
+sub JSON $JSON
+    echo console on
+    console "Subroutine started {$subroutine} " $JSON
+    debug "{$yellow}Decode JSON. Response: " $JSON "{$normal}"
+
+    #--- check for empty JSON
+    if $JSON = "" then 
+        console "No Conntent in JSON"
+        endsub
+    endif
+
+    #--- check for changes
+    find $Begin $JSON "AnythingChanged"":false" 1,E
+    if $Begin>1 then
+        console "Nothing changed"
+        endsub
+    endif
+
+    # list of keywords that we understand
+    $Key1 = """data"",Exec_data"
+    $NumKeys=1
+
+    $End=1 
+    for $I=1 to $NumKeys
+        list get $Keyword $Key{$I},1 # get Keyword and Sub Name
+        find $Start $JSON $Keyword 1,E
+        find $Begin $JSON ":" $Start,E
+
+        if $Begin
+            $Area=$Begin+5
+            find $SquareBracket $JSON "[" $Begin,$Area
+            if $SquareBracket
+                find $EndArray $JSON "]" $Start,E
+                find $End $JSON "," $EndArray,B
+            else
+                find $End $JSON "," $Begin,B
+            endif
+            
+            if $End
+                $End=$End-1
+            else
+                find $End $JSON "}" $Begin,B
+                $End=$End-1
+            endif
+            extract $Result = $JSON $Begin $End O
+            trim $Result
+            console $Result
+            list get $Sub $Key{$I},2 # get subroutine 
+            gosub {$Sub} $Result
+        else
+            debug "Keyword " $Keyword " not found"
+        endif
+    endloop
+    console "-- End {$subroutine} --"
+endsub
+
+sub init
+    echo console on
+    console "Subroutine started {$subroutine} "
+    Protocol.mqtt.topic_map[*].name % JSON
+    select {$MatchCount}
+        case 0
+            console "Create Topic Map Entry - JSON"
+            Protocol.mqtt.topic_map[*].name = JSON
+            Protocol.mqtt.topic_map[JSON].mode = SUBSCRIBE
+            Protocol.mqtt.topic_map[JSON].topic = state/f8:dc:7a:42:85:49/channels
+            Protocol.mqtt.topic_map[JSON].local_name = /{$filename}
+            Protocol.mqtt.topic_map[JSON].transformation = 
+            Protocol.mqtt.topic_map[JSON].quality_of_service = AT_LEAST_ONCE
+        case 1
+            console "Topic Map Entry found - JSON"
+        case *
+            console "Topic Map Entry Error!!!"
+    endselect
+endsub
+
+sub Exec_data $data
+    echo console on
+    console "Subroutine started {$subroutine} "
+    console $data
+    trim $data
+    strlen $StringLenght=$data
+    extract $data = $data 2 $StringLenght B # leading "[" deleted
+    console $data
+    list count $Count $data
+    console "Count of List Elements: " $Count
+    $i=0
+    loop $DataElement for each item of list $data
+        $i=$i+1
+        console "Element " $i " " $DataElement
+        append $SensorName = "data:" $i ":Dimlevel"
+        console $SensorName
+        read sensor $Check $SensorName
+        if $Check<0
+            console "Sensor " $SensorName " not registered"
+            register sensor $SensorName 0 "%"
+        endif
+        write sensor $DataElement $SensorName value
+    endloop
+endsub
