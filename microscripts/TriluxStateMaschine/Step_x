@@ -1,0 +1,67 @@
+# Step x - COMMENT
+sub Step_x
+	# Declare Persistent Variables
+	persistent $LedStart = 0
+	persistent $LedStopp = 0
+	persistent $LedCalibrate = 0
+	persistent $ButtonStart = 0
+	persistent $ButtonStopp = 0
+	persistent $ButtonCalibrate = 0
+	persistent $StepStateMaschine = 1
+	persistent $OpStateSLC = 0
+    persistent $CalPower = 0
+    persistent $MAC = "00:00:00:00:00:00"
+    persistent $CalValue = 0
+	persistent $BTN_PWR1 = 0
+	persistent $BTN_PWR2 = 0
+	persistent $BTN_PWR3 = 0
+	persistent $BTN_PWR4 = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 5000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $Reset = 0
+
+	# Switch On Output
+	echo console on
+    $StepStateMaschine = x
+	$P_Step = "Step " {$StepStateMaschine} " - text"
+	$P_Message = "helping text"
+
+    # Do
+    
+    # Next Step
+	console "Statemaschine - Step " $StepStateMaschine
+	gosub input
+	if $ButtonStopp <> 1 or $BTN_Stop == 1
+		$StepStateMaschine == 0
+	    console "Statemaschine - Stopp Button pressed"
+		$P_Message = "Stop Button pressed - Exit Cycle"
+	elseif $Reset == 1
+		$CalPower = 0
+		console "Statemaschine - GUI Reset Button"
+	elseif 
+		$StepStateMaschine == xx
+		console "Statemaschine - "
+		$P_Message = " "
+	endif
+
+    # Jump
+    gosub output
+    select $StepStateMaschine
+    case x
+		start timer "StateMaschine" in "1s" StateMaschine:Step_x
+        console " Statemaschine - wait for change"
+		$P_Message = "wait for User Input"
+	case *
+		$StepStateMaschine = 0
+		start timer "StateMaschine" in "1s" StateMaschine
+		$P_Message = "undefined Jump to Step - Restart Statemaschine"
+	endselect
+endsub
