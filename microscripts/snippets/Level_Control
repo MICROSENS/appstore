@@ -1,0 +1,12 @@
+# Level_Control
+# admin, last change: 2025-06-30 15:32:02
+
+# switch on the console output
+echo console on
+dump var
+
+$JSON="{""data"": {""url"": ""level"", ""method"": ""POST"", ""token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZGVudGl0eSI6Inhwb2VfbG9jYWwiLCJzdWIiOiJ4cG9lY2xpZW50IiwidHlwZSI6ImFjY2VzcyIsIm1hY3MiOlsiZjg6ZGM6N2E6NDI6ODE6ODkiLCJmODpkYzo3YTo0Mjo4OTo2MSIsImY4OmRjOjdhOjQyOjg1OjQ5Il19.mFSaYjzjgZ4WN0fQuJ6ty9QclPAISZcaeSd7x_3NBA0"", ""payload"": {""channels"": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], ""target_level"": 100, ""fade_time"": 1}}}""
+
+mqtt publish "state/f8:dc:7a:42:85:49/channels" $JSON
+
+dump var
