@@ -1,12 +1,45 @@
 # Level_Control
 # admin, last change: 2025-06-30 15:32:02
 
+gosub xpoe 100 1 "1,2,3"
+
 # switch on the console output
-echo console on
-dump var
+sub xpoe $target_level $fade_time $channels
+    echo console on
 
-$JSON="{""data"": {""url"": ""level"", ""method"": ""POST"", ""token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZGVudGl0eSI6Inhwb2VfbG9jYWwiLCJzdWIiOiJ4cG9lY2xpZW50IiwidHlwZSI6ImFjY2VzcyIsIm1hY3MiOlsiZjg6ZGM6N2E6NDI6ODE6ODkiLCJmODpkYzo3YTo0Mjo4OTo2MSIsImY4OmRjOjdhOjQyOjg1OjQ5Il19.mFSaYjzjgZ4WN0fQuJ6ty9QclPAISZcaeSd7x_3NBA0"", ""payload"": {""channels"": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], ""target_level"": 100, ""fade_time"": 1}}}""
+    $JSON="{""data"": {""url"": ""level"", ""method"": ""POST"", ""token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZGVudGl0eSI6Inhwb2VfbG9jYWwiLCJzdWIiOiJ4cG9lY2xpZW50IiwidHlwZSI6ImFjY2VzcyIsIm1hY3MiOlsiZjg6ZGM6N2E6NDI6ODE6ODkiLCJmODpkYzo3YTo0Mjo4OTo2MSIsImY4OmRjOjdhOjQyOjg1OjQ5Il19.mFSaYjzjgZ4WN0fQuJ6ty9QclPAISZcaeSd7x_3NBA0"", ""payload"": {""channels"": [" $channels "], ""target_level"": " $target_level ", ""fade_time"": " $fade_time "}}}""
 
-mqtt publish "state/f8:dc:7a:42:85:49/channels" $JSON
+    mqtt publish "state/f8:dc:7a:42:85:49/channels" $JSON
+endSub
 
-dump var
+sub Motion $ZoneList
+    echo console on
+    dump event
+    dump var
+#    $groupname=
+#    read sensorgroup $val $groupname average
+endsub
+
+sub init $DeviceName
+    for $I=1 to 16
+        Device.smartoffice.sensor_group_config[*].group_name = Motion_{$I}
+        Device.smartoffice.sensor_group_config[Motion_{$I}].attribute = MOTION
+        Device.smartoffice.sensor_group_config[Motion_{$I}].associated_devices = {$DeviceName}.{$I}
+        Device.smartoffice.sensor_group_config[Motion_{$I}].unit = {$filename}:Motion {$I}
+        Device.smartoffice.sensor_group_config[Motion_{$I}].decimal_places = 1
+        Device.smartoffice.sensor_group_config[Motion_{$I}].value_caching = Disabled
+        Device.smartoffice.sensor_group_config[Motion_{$I}].run_script_when = ZERO_CROSSING
+        Device.smartoffice.sensor_group_config[Motion_{$I}].run_script_delta = 5
+        Device.smartoffice.sensor_group_config[Motion_{$I}].run_script_idle_time = 0
+        Device.smartoffice.sensor_group_config[Motion_{$I}].script_name = 
+        Device.smartoffice.sensor_group_config[Motion_{$I}].additional_script_name = 
+        Device.smartoffice.sensor_group_config[Motion_{$I}].report_mode = DELTA_ABSOLUTE
+        Device.smartoffice.sensor_group_config[Motion_{$I}].additional_parameter = 
+        Device.smartoffice.sensor_group_config[Motion_{$I}].value_lifetime = 0
+        Device.smartoffice.sensor_group_config[Motion_{$I}].lower_boundary = 
+        Device.smartoffice.sensor_group_config[Motion_{$I}].upper_boundary = 
+        Device.smartoffice.sensor_group_config[Motion_{$I}].boundary_hysteresis = NONE
+        Device.smartoffice.sensor_group_config[Motion_{$I}].update_delta = 1
+        Device.smartoffice.sensor_group_config[Motion_{$I}].rate_limit = 0
+        Device.smartoffice.sensor_group_config[Motion_{$I}].report_idle_time = 0
+endsub

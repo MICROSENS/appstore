@@ -1,0 +1,69 @@
+# motion_timer
+# admin, last change: 2025-07-07 14:34:44
+
+echo console on
+var groupname "Sensor_Group_1_ON"
+
+# --- for testing
+$SensorName="SmartSensor"
+unregister sensor "{$SensorName}:1:MOTION"
+register sensor "{$SensorName}:1:MOTION" 0 ""
+
+Device.smartoffice.sensor_group_config[{$groupname}].group_name =
+gosub init $groupname $SensorName
+
+wait 5
+
+$val=100
+write sensor $val "{$SensorName}:1:MOTION"
+
+wait 5
+#---- end testing
+
+
+read sensorgroup $average_motion $groupname average
+print "My motion value= {$average_motion}"
+
+
+if $average_motion != 0 
+   print "Moment detected"
+
+   $JSON ="{""data"": {""url"": ""level"",""method"": ""POST"", ""token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZGVudGl0eSI6Inhwb2VfbG9jYWwiLCJzdWIiOiJ4cG9lY2xpZW50IiwidHlwZSI6ImFjY2VzcyIsIm1hY3MiOlsiZjg6ZGM6N2E6NDI6ODE6YzUiXX0.hGBzntIw2HgS1i-n4fR93HTz6m3ajhZF9oYlSsk310c"",""payload"": {""channels"": [1,2], ""target_level"": 100, ""fade_time"": 1}}}"
+   mqtt publish "switch/f8:dc:7a:42:81:c5/api" $JSON
+
+   print "waiting"
+
+   wait 10
+
+   $JSON ="{""data"": {""url"": ""level"",""method"": ""POST"", ""token"": ""eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZGVudGl0eSI6Inhwb2VfbG9jYWwiLCJzdWIiOiJ4cG9lY2xpZW50IiwidHlwZSI6ImFjY2VzcyIsIm1hY3MiOlsiZjg6ZGM6N2E6NDI6ODE6YzUiXX0.hGBzntIw2HgS1i-n4fR93HTz6m3ajhZF9oYlSsk310c"",""payload"": {""channels"": [1,2], ""target_level"": 0, ""fade_time"": 1}}}"
+   mqtt publish "switch/f8:dc:7a:42:81:c5/api" $JSON
+
+   print "Lights off"
+
+else 
+   print "No moment"
+
+
+# for testing, create the sensor group
+sub init $groupname $SensorName
+Device.smartoffice.sensor_group_config[*].group_name = {$groupname}
+Device.smartoffice.sensor_group_config[{$groupname}].attribute = MOTION
+Device.smartoffice.sensor_group_config[{$groupname}].associated_devices = {$SensorName}
+Device.smartoffice.sensor_group_config[{$groupname}].unit = 
+Device.smartoffice.sensor_group_config[{$groupname}].decimal_places = 1
+Device.smartoffice.sensor_group_config[{$groupname}].value_caching = Disabled
+Device.smartoffice.sensor_group_config[{$groupname}].run_script_when = ZERO_CROSSING
+Device.smartoffice.sensor_group_config[{$groupname}].run_script_delta = 5
+Device.smartoffice.sensor_group_config[{$groupname}].run_script_idle_time = 0
+Device.smartoffice.sensor_group_config[{$groupname}].script_name = 
+Device.smartoffice.sensor_group_config[{$groupname}].additional_script_name = 
+Device.smartoffice.sensor_group_config[{$groupname}].report_mode = DELTA_ABSOLUTE
+Device.smartoffice.sensor_group_config[{$groupname}].additional_parameter = 
+Device.smartoffice.sensor_group_config[{$groupname}].value_lifetime = 0
+Device.smartoffice.sensor_group_config[{$groupname}].lower_boundary = 
+Device.smartoffice.sensor_group_config[{$groupname}].upper_boundary = 
+Device.smartoffice.sensor_group_config[{$groupname}].boundary_hysteresis = NONE
+Device.smartoffice.sensor_group_config[{$groupname}].update_delta = 1
+Device.smartoffice.sensor_group_config[{$groupname}].rate_limit = 0
+Device.smartoffice.sensor_group_config[{$groupname}].report_idle_time = 0
+endsub

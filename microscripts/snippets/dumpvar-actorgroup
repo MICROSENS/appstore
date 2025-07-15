@@ -1,0 +1,12 @@
+echo console on
+dump var
+
+-> Result
+C0: filename: dumpvar
+C1: event overview: Event 110 ACTOR_GROUP_CHANGE_REQUEST executed from SmartDaemon
+C2: port_id: 0
+C3: group_status_index: 1
+C4: priority: 10
+C5: group_name: Dimlevel_Zone_1_Cold
+C6: attribute: LED_PANEL
+C7: value: 0
