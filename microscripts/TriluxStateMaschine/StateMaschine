@@ -1,11 +1,11 @@
-# StateMaschine
+# StateMachine
 # admin, last change: 2025-06-02 15:33:54
 
 # Jump to Inital Step
 gosub Step_1
 
 
-######## StateMaschine Steps ########
+######## StateMachine Steps ########
 # Step 1 - Init
 sub Step_1
 	# Switch On Output
@@ -17,7 +17,7 @@ sub Step_1
 	persistent $ButtonStart = 0
 	persistent $ButtonStopp = 0
 	persistent $ButtonCalibrate = 0
-	persistent $StepStateMaschine = 1
+	persistent $StepStateMachine = 1
 	persistent $OpStateSLC = 0
     persistent $CalPower = 0
 	persistent $BTN_PWR1 = 0
@@ -34,65 +34,101 @@ sub Step_1
 	persistent $P_Step = "xxx"
 	persistent $P_Message = "xxx"
 	persistent $P_Progress = "xxx"
+	persistent $TGL_VG_SLC = 0
+	persistent $SLD_VG_BOX = 0
+	persistent $CurrentChannel = 0
 
 	# Stopp Timer
-	stop timer "StateMaschine"
-	$StepStateMaschine = 0
-	$P_Step = "Step " {$StepStateMaschine} " - INIT Prepare Cycle"
+	stop timer "StateMachine"
+	$StepStateMachine = 0
+	$P_Step = "Step " {$StepStateMachine} " - INIT Prepare Cycle"
 	$P_Message = " --- "
 	$P_Progress = " --- "
 	
     # Do
 	# Clear Smart Device ID
 	Device.smartoffice.device_config[SLC].device_id = 
+
+	$CurrentChannel = 0
 	
 	# Controller Tab Config
 	Device.controller.smartlight_config[SLC].max_source_power = 50
 	Device.controller.smartlight_config[SLC].panel_power_limit = 3
 	Device.controller.smartlight_config[SLC].connection_timeout = 0
 	
+	$LedCalibrate = 1
 	$LedStart = 0
 	$LedStopp = 0
-	$LedCalibrate = 0
-	console "Statemaschine - Step " $StepStateMaschine
+	console "Start in 6 sec"
+	$P_Message = "Start in 6 sec"
 	gosub output
-	for $i=5 to 1
-		console "Start in " $i " sec"
-		$P_Message = "Start in " $i " sec"
-		wait 1
-	next
+	wait 1
+	$LedCalibrate = 0
+	$LedStart = 1
+	$LedStopp = 0
+	console "Start in 5 sec"
+	$P_Message = "Start in 5 sec"
+	gosub output
+	wait 1
+	$LedCalibrate = 0
+	$LedStart = 0
+	$LedStopp = 1
+	console "Start in 4 sec"
+	$P_Message = "Start in 4 sec"
+	gosub output
+	wait 1
+	$LedCalibrate = 0
+	$LedStart = 1
+	$LedStopp = 0
+	console "Start in 3 sec"
+	$P_Message = "Start in 3 sec"
+	gosub output
+	wait 1
+	$LedCalibrate = 1
+	$LedStart = 0
+	$LedStopp = 0
+	console "Start in 2 sec"
+	$P_Message = "Start in 2 sec"
+	gosub output
+	wait 1
+	$LedCalibrate = 0
+	$LedStart = 0
+	$LedStopp = 0
+	console "Start in 1 sec"
+	$P_Message = "Start in 1 sec"
 
 	# Next Step
-	$StepStateMaschine = 1
-	console "Statemaschine - Step " $StepStateMaschine
+	$StepStateMachine = 1
+	console "StateMachine - Step " $StepStateMachine
 	gosub input
 	if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMaschine = 0
+		$StepStateMachine = 0
 		$BTN_Stop = 0
-        console "Statemaschine - Stopp Button pressed"
+        console "StateMachine - Stopp Button pressed"
 		$P_Message = "Stop Button pressed - Exit Cycle"
 	elseif $Reset == 1
 		$CalPower = 0
+		$StepStateMachine == 0
     elseif $CalPower == 0
-        $StepStateMaschine = 5
-        console "Statemaschine - Calibration Power == 0"
+        $StepStateMachine = 5
+        console "StateMachine - Calibration Power == 0"
 		$P_Message = "No Power predefined"
     else
-        $StepStateMaschine = 10
-        console "Statemaschine - Init Step finished - go ahead"
+        $StepStateMachine = 10
+        console "StateMachine - Init Step finished - go ahead"
 		$P_Message = "Init Step finished - go ahead"
 	endif
 	
 	# Jump
 	gosub output
-    select $StepStateMaschine
+    select $StepStateMachine
     case 5
-    	gosub StateMaschine:Step_5
+    	gosub StateMachine:Step_5
 	case 10
-		gosub StateMaschine:Step_10
+		gosub StateMachine:Step_10
 	case *
-		$StepStateMaschine = 0
-		gosub StateMaschine
+		$StepStateMachine = 0
+		gosub StateMachine
 	endselect
 endsub
 
@@ -105,47 +141,60 @@ sub Step_5
 	persistent $ButtonStart = 0
 	persistent $ButtonStopp = 0
 	persistent $ButtonCalibrate = 0
-	persistent $StepStateMaschine = 0
+	persistent $StepStateMachine = 0
 	persistent $MAC = "00:00:00:00:00:00"
 	persistent $OpStateSLC = 0
 	persistent $P_Step = "xxx"
 	persistent $P_Message = "xxx"
 	persistent $P_Progress = "xxx"
+	persistent $TGL_VG_SLC = 0
+	persistent $SLD_VG_BOX = 0
     
     # Switch On Output
     echo console on
-    $StepStateMaschine = 5
-	$P_Step = "Step " {$StepStateMaschine} " - No Calibration Power selcted"
-	$P_Message = "Please choose a Power for the Calibration"
+    $StepStateMachine = 5
+	$P_Step = "Step " {$StepStateMachine} " - No Calibration Power selcted"
+	$P_Message = "Power for Calibration is missing"
 
 	# Do
+	if $LedStopp
+		$LedCalibrate = 0
+		$LedStart = 0
+		$LedStopp = 0
+	else
+		$LedCalibrate = 0
+		$LedStart = 0
+		$LedStopp = 1
+	endif
+
     gosub input
     # Next Step
-    console "Statemaschine - Step " $StepStateMaschine
+    console "StateMachine - Step " $StepStateMachine
     if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMaschine == 0
-	    console "Statemaschine - Stopp Button pressed"
+		$StepStateMachine == 0
+	    console "StateMachine - Stopp Button pressed"
 		$P_Message = "Stop Button pressed - Exit Cycle" 
 	elseif $Reset == 1
 		$CalPower = 0
+		$StepStateMachine == 0
 	elseif $CalPower <> 0
-        $StepStateMaschine = 10
-        console "Statemaschine - Calibration Power <> 0 - go ahead"
+        $StepStateMachine = 10
+        console "StateMachine - Calibration Power <> 0 - go ahead"
 		$P_Message = " Calibration Power choosen - go ahead"
     endif
 
     # Jump
 	gosub output
-    select $StepStateMaschine
+    select $StepStateMachine
     case 5
-		start timer "StateMaschine" in "1s" StateMaschine:Step_5
-        console " Statemaschine - wait for change"
-		$P_Message = "wait for User Input"
+		start timer "StateMachine" in "1s" StateMachine:Step_5
+        console "StateMachine - wait for change"
+		# $P_Message = "wait for User Input"
     case 10
-		start timer "StateMaschine" in "1s" StateMaschine:Step_10
+		start timer "StateMachine" in "1s" StateMachine:Step_10
 	case *
-		$StepStateMaschine = 0
-		start timer "StateMaschine" in "1s" StateMaschine
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
 	endselect
 
 endsub
@@ -159,17 +208,23 @@ sub Step_10
 	persistent $ButtonStart = 0
 	persistent $ButtonStopp = 0
 	persistent $ButtonCalibrate = 0
-	persistent $StepStateMaschine = 0
+	persistent $StepStateMachine = 0
 	persistent $MAC = "00:00:00:00:00:00"
 	persistent $OpStateSLC = 0
 	persistent $P_Step = "xxx"
 	persistent $P_Message = "xxx"
 	persistent $P_Progress = "xxx"
+	persistent $TGL_VG_SLC = 0
+	persistent $SLD_VG_BOX = 0
+	persistent $CalPower = 0
+	persistent $CurrentChannel = 0
 
 	# Switch On Output
 	echo console on
-	$StepStateMaschine = 10
-	$P_Step = "Step " {$StepStateMaschine} " - wait for SLC"
+	$StepStateMachine = 10
+	$P_Step = "Step " {$StepStateMachine} " - wait for SLC"
+	$Temp=$CalPower / 1000
+	$P_Message = "Connect Luminaire - Panel Power: " $Temp " Watt"
 
 	if $LedStart == 1
 		$LedStart = 0
@@ -192,53 +247,61 @@ sub Step_10
     # Do
 	Protocol.lldp.received_overview[1/1].chassis_id %
 	$MAC={$cli}
-	
+	$CurrentChannel = 1
+
+	if $CurrentChannel <> 1 then $CurrentChannel = 1
 	# Next Step
-	console "Statemaschine - Step " $StepStateMaschine
+	console "StateMachine - Step " $StepStateMachine
 	gosub input
 	if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMaschine == 0
+		$StepStateMachine == 0
 	elseif $Reset == 1
 		$CalPower = 0
+		$StepStateMachine == 0
 	elseif $MAC <> ""
-		Device.controller.smartlight_config[SLC].panel_power_limit = 20
+		$TempVal = $CalPower * 0.001
+		console "StateMachine - Set Config to " $TempVal
+		Device.controller.smartlight_config[SLC].panel_power_limit = {$TempVal}
 		Device.controller.smartlight_config[SLC].connection_timeout = 30
-		$StepStateMaschine = 20
+		$StepStateMachine = 20
 	endif
 	
 	# Jump
 	gosub output
-	if $StepStateMaschine == 10
-		start timer "StateMaschine" in "1s" StateMaschine:Step_10
-        console "Statemaschine - wait for change"
-		$P_Message = "wait for user input"
-	elseif $StepStateMaschine == 20
-		start timer "StateMaschine" in "1s" StateMaschine:Step_20
-	else
-		$StepStateMaschine = 0
-		start timer "StateMaschine" in "1s" StateMaschine
-	endif
-	
+	select $StepStateMachine
+	case 10
+		start timer "StateMachine" in "1s" StateMachine:Step_10
+		console "StateMachine - wait for change"
+	case 20
+		start timer "StateMachine" in "1s" StateMachine:Step_20
+	case *
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+	endselect
 endsub
 
 # Step 20 - MAC gefunden
 sub Step_20
-	# Switch On Output
-	echo console on
-	$StepStateMaschine = 20
-	$P_Step = "Step " {$StepStateMaschine} " - MAC in LLDP Table found"
-
 	# Declare Persistent Variables
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
 	persistent $LedStart = 0
 	persistent $LedStopp = 0
 	persistent $LedCalibrate = 0
 	persistent $ButtonStart = 0
 	persistent $ButtonStopp = 0
 	persistent $ButtonCalibrate = 0
-	persistent $StepStateMaschine = 0
+	persistent $StepStateMachine = 0
 	persistent $MAC = "00:00:00:00:00:00"
 	persistent $OpStateSLC = 0
-	
+	persistent $RampTime = 10
+
+	# Switch On Output
+	echo console on
+	$StepStateMachine = 20
+	$P_Step = "Step " {$StepStateMachine} " - MAC in LLDP Table found"
+
 	if $LedStart == 1 || $LedStopp == 1 || $LedCalibrate == 1
 		$LedStart = 0
 		$LedStopp = 0
@@ -253,51 +316,161 @@ sub Step_20
 		$LedCalibrate = 0
 	endif
 
+	# Write Mac to Device Configuration
+	Device.smartoffice.device_config[SLC].device_id = {$MAC}
+
+	wait 2
+
 	Device.smartoffice.device_information[SLC].operational_state %
 	$OpStateSLC={$cli}
 	console $OpStateSLC
 
+	Device.smartoffice.device_information[SLC].article_number %
+	$ArticleNumber="{$cli}"
+	console "Read Articlenumber "$ArticleNumber
+
+	$GoAhead = 0
+	select $ArticleNumber
+	case "MS660102MMS"
+		console "SLC-V2 detected - not Supported"
+		$P_Message = "Connect a SLC-V3 or SLC-V4"
+	case "MS660103M"
+		console "SLC-V3 detected"
+		$P_Message = "SLC-V3: 2 Channels - Start by 1"
+		$GoAhead = 1
+	case "MS660104M"
+		console "SLC-V4 detected"
+		$P_Message = "SLC-V4: 6 Channels - Start by 1"
+		$GoAhead = 1
+	case *
+		console "StateMachine - Unknown Article Number " $ArticleNumber
+		$P_Message = "Unknown Article Number - Restart"
+		$StepStateMachine = 0
+	endselect
+
 	# Next Step
-	console "Statemaschine - Step " $StepStateMaschine
+	console "StateMachine - Step " $StepStateMachine
 	gosub input
 	if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMaschine == 0
+		$StepStateMachine = 0
 	elseif $Reset == 1
 		$CalPower = 0
-	elseif $OpStateSLC == "NORMAL"
-		$StepStateMaschine == 30
-	elseif $OpStateSLC == "NOT_READY"
-		$StepStateMaschine == 0
-	elseif $OpStateSLC == "CONFIG_ERRPR"
-		$StepStateMaschine == 20
+		$StepStateMachine = 0
+	elseif $OpStateSLC == "NORMAL" and $GoAhead
+		console $StepStateMachine " SLC OperationalState " $OpStateSLC " - Go ahead"
+		$StepStateMachine = 30
+		$TempVal = 0
+		write smartdevice $TempVal= SLC Dimlevel
+		write smartdevice $TempVal= SLC Calibration
+		write smartdevice $RampTime= SLC Ramp
+	elseif $OpStateSLC == "NOT_READY" and $GoAhead
+		console $StepStateMachine " SLC " $OpStateSLC " - Restart Statemachine"	
+		$StepStateMachine = 0
+	elseif $OpStateSLC == "PAIRING" and $GoAhead
+		console $StepStateMachine " SLC " $OpStateSLC " - Wait for SLC"
+		$StepStateMachine = 20
+	elseif $OpStateSLC == "CONFIG_ERROR" and $GoAhead
+		console $StepStateMachine " SLC " $OpStateSLC " detected - Go Ahead"
+		$StepStateMachine = 21
 	endif
-	
-	# Write Max to Device Configuration
-	Device.smartoffice.device_config[SLC].device_id = {$MAC}
 
 	# Jump
 	gosub output
-	select $StepStateMaschine
+	select $StepStateMachine
 	case 20
-		start timer "StateMaschine" in "1s" StateMaschine:Step_20
-        console " Statemaschine - wait for change"
-		$P_Message = " wait for user input "
-
+		start timer "StateMachine" in "1s" StateMachine:Step_20
+        console "StateMachine - wait for change"
+	case 21
+		start timer "StateMachine" in "1s" StateMachine:Step_21
+        console "StateMachine - SLC CONFIG_ERROR"
+		$P_Message = " SLC Config Error detected - retry "
 	case 30
-		start timer "StateMaschine" in "1s" StateMaschine:Step_30
+		start timer "StateMachine" in "1s" StateMachine:Step_30
 	case *
-		$StepStateMaschine = 0
-		start timer "StateMaschine" in "1s" StateMaschine
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+	endselect
+endsub
+
+# Step 21 - SLC Config Error
+sub Step_21
+	# Declare Persistent Variables
+	persistent $LedStart = 0
+	persistent $LedStopp = 0
+	persistent $LedCalibrate = 0
+	persistent $ButtonStart = 0
+	persistent $ButtonStopp = 0
+	persistent $ButtonCalibrate = 0
+	persistent $StepStateMachine = 1
+	persistent $OpStateSLC = 0
+    persistent $CalPower = 0
+    persistent $MAC = "00:00:00:00:00:00"
+    persistent $CalValue = 0
+	persistent $BTN_PWR1 = 0
+	persistent $BTN_PWR2 = 0
+	persistent $BTN_PWR3 = 0
+	persistent $BTN_PWR4 = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 5000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $Reset = 0
+
+	# Switch On Output
+	echo console on
+    $StepStateMachine = 21
+	$P_Step = "Step " {$StepStateMachine} " - SLC Config Error"
+	$P_Message = "Press Stop or (Re)Start"
+
+    # Do
+	$BTN_Cal = 0
+	$BTN_Start = 0
+	$BTN_Stop = 1
+	gosub checkslc SLC NORMAL return $OK
+
+    # Next Step
+	console "StateMachine - Step " $StepStateMachine
+	gosub input
+	if $ButtonStopp <> 1 or $BTN_Stop == 1
+		$StepStateMachine == 60
+	    console "StateMachine - Stopp Button pressed"
+		$P_Message = "Stop Button pressed - Exit Cycle"
+	elseif $Reset == 1
+		$CalPower = 0
+		console "StateMachine - GUI Reset Button"
+	elseif $ButtonStart == 1 or $BTN_Start == 1
+		console "StateMachine - User Restart after config Error"
+		$StepStateMachine == 20
+	endif
+
+    # Jump
+    gosub output
+    select $StepStateMachine
+	case 20
+		start timer "StateMachine" in "1s" StateMachine:Step_20
+		console " StateMachine - Restry after Config Error"
+    case 21
+		start timer "StateMachine" in "1s" StateMachine:Step_21
+        console " StateMachine - wait for change"
+	case 60
+		start timer "StateMachine" in "1s" StateMachine:Step_60
+        console " StateMachine - wait for SLC Unplugging"
+		$P_Message = "disconnect the Luminaire"
+	case *
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+		$P_Message = "undefined Jump to Step - Restart StateMachine"
 	endselect
 endsub
 
 # Step 30 - Input User
 sub Step_30
-	# Switch On Output
-	echo console on
-	$StepStateMaschine = 30
-	$P_Step = "Step " {$StepStateMaschine} " - Wait for User Input"
-
 	# Declare Persistent Variables
 	persistent $LedStart = 0
 	persistent $LedStopp = 0
@@ -305,172 +478,281 @@ sub Step_30
 	persistent $ButtonStart = 0
 	persistent $ButtonStopp = 0
 	persistent $ButtonCalibrate = 0
-	persistent $StepStateMaschine = 0
+	persistent $StepStateMachine = 0
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $LastCalibration = 0
+	persistent $CurrentChannel = 1
+	persistent $CalPower = 0
+	persistent $TGL_VG_SLC = 0
 
-	# DO	
-	$LedStart = 1
-    $LedStopp = 1
-	$LedCalibrate = 1
+	# Switch On Output
+	echo console on
+	$StepStateMachine = 30
+	$P_Step = "Step " {$StepStateMachine} " - Wait for User Input - PanelPower " $CalPower
+
+	select $LastCalibration
+	case 0
+		$P_Message = "Calibrate or Cancel - Channel " $CurrentChannel 
+		$LedCalibrate = 1
+		$LedStart = 0
+		$LedStopp = 1
+	case 1 to 4095
+		$P_Message = "Run Test, Calibrate or Cancel - Channel " $CurrentChannel " Calibration " $LastCalibration
+		$LedCalibrate = 1
+		$LedStart = 1
+		$LedStopp = 1
+	case *
+		console "Last Calibration Value " $LastCalibration " - set Calibration Value to 0"
+		$LastCalibration = 0
+	endselect
+
+	# DO
+	$OK = 0
+	gosub checkslc SLC NORMAL return $OK
+
+    Device.smartoffice.device_information[SLC].article_number %
+	$ArticleNumber="{$cli}"
+	console "StateMachine - " $StepStateMachine " ArticleNumber read " $ArticleNumber
+
+	select $ArticleNumber
+	case "MS660102MMS"
+		if $CurrentChannel == 0 and $CurrentChannel <> 1
+			$CurrentChannel = 1
+		endif
+	case "MS660103M"
+		if $CurrentChannel == 0 or $CurrentChannel > 2
+			$CurrentChannel = 1
+		endif
+	case "MS660104M"
+		if $CurrentChannel == 0 or $CurrentChannel > 6
+		$CurrentChannel = 1
+		endif
+	case *
+		console "StateMachine - Unknown Article Number " $ArticleNumber
+		$StepStateMachine = 0
+	endselect
 
 	# Next Step
-	console "Statemaschine - Step " $StepStateMaschine
+	console "StateMachine - Step " $StepStateMachine
 	gosub input
-	if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMaschine == 0
+	if ( $ButtonStopp <> 1 or $BTN_Stop == 1 ) and $TGL_VG_SLC = 0
+		$StepStateMachine == 60
+	elseif ( $ButtonStopp <> 1 or $BTN_Stop == 1 ) and $TGL_VG_SLC = 1
+		$StepStateMachine == 56
 	elseif $Reset == 1
 		$CalPower = 0
-	elseif $ButtonStart
-		$StepStateMaschine == 40
-	elseif $ButtonCalibrate
-		$StepStateMaschine == 31
+		$StepStateMachine == 0
+	elseif ( $ButtonStart or $BTN_Start ) and $LastCalibration <> 0
+		$StepStateMachine == 40
+	elseif $ButtonCalibrate or $BTN_Cal
+		$StepStateMachine == 31
 	endif
 	
 	# Jump
 	gosub output
-	select $StepStateMaschine
+	select $StepStateMachine
 	case 30
-		start timer "StateMaschine" in "1s" StateMaschine:Step_30
-        console " Statemaschine - wait for change"
+		start timer "StateMachine" in "1s" StateMachine:Step_30
+        console "StateMachine - wait for change"
 	case 31
-		start timer "StateMaschine" in "1s" StateMaschine:Step_31
+		start timer "StateMachine" in "1s" StateMachine:Step_31
 	case 40
-		start timer "StateMaschine" in "1s" StateMaschine:Step_40
+		start timer "StateMachine" in "1s" StateMachine:Step_40
+	case 56
+		start timer "StateMachine" in "1s" StateMachine:Step_56
+	case 60
+		start timer "StateMachine" in "1s" StateMachine:Step_60
 	case *
-		$StepStateMaschine = 0
-		start timer "StateMaschine" in "1s" StateMaschine
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
 	endselect
 endsub
 
 # Step 31 - Start Calibration
 sub Step_31
-	# Switch On Output
-	echo console on
-	$StepStateMaschine = 31
-	$P_Step = "Step " {$StepStateMaschine} " - Start Calibration"
-
 	# Declare Persistent Variables
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
 	persistent $LedStart = 0
 	persistent $LedStopp = 0
 	persistent $LedCalibrate = 0
 	persistent $ButtonStart = 0
 	persistent $ButtonStopp = 0
 	persistent $ButtonCalibrate = 0
-	persistent $StepStateMaschine = 1
+	persistent $StepStateMachine = 1
 	persistent $OpStateSLC = 0
     persistent $CalPower = 0
     persistent $MAC = "00:00:00:00:00:00"
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $CurrentChannel = 0
+
+	# Switch On Output
+	echo console on
+	$StepStateMachine = 31
+	if $CurrentChannel == 0 then $CurrentChannel = 1
+	$P_Step = "Step " {$StepStateMachine} " - Start Calibration for Channel " $CurrentChannel
+	$P_Message = "Send calibration command to SLC - Channel " $CurrentChannel
 	
-    # Doq
+	if $LedStopp == 1 and $LedStart == 1
+		$LedCalibrate = 1	
+		$LedStart = 1
+		$LedStopp = 0
+	elseif $LedStart == 1 and $LedCalibrate == 1
+		$LedCalibrate = 0	
+		$LedStart = 1
+		$LedStopp = 1
+	else 
+		$LedCalibrate = 1	
+		$LedStart = 1
+		$LedStopp = 0	
+	endif
+
+    # Do
+	$OK = 0
+	gosub checkslc SLC NORMAL return $OK
 	$StartCalibration=0
-	write smartdevice $StartCalibration= SLC Calibration
+	write smartdevice $StartCalibration= SLC Calibration $CurrentChannel
     
 	$Val=1
-	write smartdevice $Val= SLC Calibrate
-	console " Statemaschine - Send Calibrate Command"
+	write smartdevice $Val= SLC Calibrate $CurrentChannel
+	wait 1
 
-	read smartdevice $CalStatus= SLC CalibrationStatus
-	console " Statemaschine - SLC Calibration Status " $CalStatus
+	console "StateMachine - Send Calibrate Command"
+	
+	$CalStatus=0
+	read smartdevice $CalStatus= SLC CalibrationStatus $CurrentChannel
+	console "StateMachine - SLC Calibration Status " $CalStatus
 
     # Next Step
-	console "Statemaschine - Step " $StepStateMaschine
+	console "StateMachine - Step " $StepStateMachine
 	gosub input
 	if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMaschine == 0
+		$StepStateMachine == 0
 	elseif $Reset == 1
 		$CalPower = 0
+		$StepStateMachine == 0
 	elseif $CalStatus <> 0
-		$StepStateMaschine == 32
+		$StepStateMachine == 32
 	endif
     
     # Jump
     gosub output
-    select $StepStateMaschine
+    select $StepStateMachine
     case 31
-		start timer "StateMaschine" in "1s" StateMaschine:Step_31
-        console " Statemaschine - wait for change"
-	case 1
-		start timer "StateMaschine" in "1s" StateMaschine:Step_1
-		console " Statemaschine - Restart Cycle"
+		start timer "StateMachine" in "1s" StateMachine:Step_31
+        console "StateMachine - wait for change"
 	case 32
-		start timer "StateMaschine" in "1s" StateMaschine:Step_32
-		console " Statemaschine - Calibrate Command Send"
+		start timer "StateMachine" in "1s" StateMachine:Step_32
+		console "StateMachine - Calibrate Command Send"
 	case *
-		$StepStateMaschine = 0
-		start timer "StateMaschine" in "1s" StateMaschine
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
 	endselect
 endsub
 
 # Step 32 - Read Calibration
 sub Step_32
-	# Switch On Output
-	echo console on
-	$StepStateMaschine = 32
-	$P_Step = "Step " {$StepStateMaschine} " - Read Calibration"
-
 	# Declare Persistent Variables
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
 	persistent $LedStart = 0
 	persistent $LedStopp = 0
 	persistent $LedCalibrate = 0
 	persistent $ButtonStart = 0
 	persistent $ButtonStopp = 0
 	persistent $ButtonCalibrate = 0
-	persistent $StepStateMaschine = 1
+	persistent $StepStateMachine = 1
 	persistent $OpStateSLC = 0
     persistent $CalPower = 0
     persistent $MAC = "00:00:00:00:00:00"
 	persistent $CalValue = 0
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $LastCalibration = 0
+	persistent $CurrentChannel = 0
+
+	# Switch On Output
+	echo console on
+	$StepStateMachine = 32
+	$P_Step = "Step " {$StepStateMachine} " - Read Calibration for Channel " $CurrentChannel
 	
+	if $LedStopp == 1 and $LedStart == 1
+		$LedCalibrate = 1	
+		$LedStart = 1
+		$LedStopp = 0
+	elseif $LedStart == 1 and $LedCalibrate == 1
+		$LedCalibrate = 0	
+		$LedStart = 1
+		$LedStopp = 1
+	else 
+		$LedCalibrate = 1	
+		$LedStart = 1
+		$LedStopp = 0	
+	endif
+
     # Do
-	read smartdevice $TMPCalValue= SLC Calibration
-	console "Statemaschine - Calibration Read " $CalValue
+	$OK = 0
+	gosub checkslc SLC NORMAL return $OK
+
+	$TMPCalValue=0
+	read smartdevice $TMPCalValue= SLC Calibration $CurrentChannel
+	console "StateMachine - Calibration Read " $CalValue
 
 	# 0 =not calibrated, 1= running, 2= done, 3 = error
-	read smartdevice $CalStatus= SLC CalibrationStatus
-	console "Statemaschine - Calibration Status " $CalStatus
+	$CalStatus=0
+	read smartdevice $CalStatus= SLC CalibrationStatus $CurrentChannel
+	console "StateMachine - Calibration Status " $CalStatus
 
     # Next Step
-	console "Statemaschine - Step " $StepStateMaschine
+	console "StateMachine - Step " $StepStateMachine
 	gosub input
 	if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMaschine == 0
+		$StepStateMachine == 0
 	elseif $Reset == 1
 		$CalPower = 0
+		$StepStateMachine == 0
 	elseif $TMPCalValue <> 0 and $CalStatus == 2 # Good to Go
 		$CalValue=$TMPCalValue
-		$StepStateMaschine == 50
+		$LastCalibration=$TMPCalValue
+		$StepStateMachine == 50
 	elseif $TMPCalValue == 0 and $CalStatus == 3 # Calibration Error
-		$StepStateMaschine == 33
+		$StepStateMachine == 33
 	elseif $CalStatus == 1 # Calibration running
-		$StepStateMaschine == 32
+		$StepStateMachine == 32
 	else
-		$StepStateMaschine == 1
+		$StepStateMachine == 1
 	endif
 
     # Jump
     gosub output
-    select $StepStateMaschine
+    select $StepStateMachine
     case 32
-		start timer "StateMaschine" in "1s" StateMaschine:Step_32
-        console " Statemaschine - wait for change"
+		start timer "StateMachine" in "1s" StateMachine:Step_32
+        console "StateMachine - wait for change"
 	case 50
-		start timer "StateMaschine" in "1s" StateMaschine:Step_50
-		console " Statemaschine - Calibration Done"
+		start timer "StateMachine" in "1s" StateMachine:Step_50
+		console "StateMachine - Calibration Done"
 	case 33
-		start timer "StateMaschine" in "1s" StateMaschine:Step_33
-		console " Statemaschine - Calibration Error - Step by Step"
+		start timer "StateMachine" in "1s" StateMachine:Step_33
+		console "StateMachine - Calibration Error - Step by Step"
 	case *
-		$StepStateMaschine = 0
-		start timer "StateMaschine" in "1s" StateMaschine
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
 	endselect
 endsub
 
 # Step 33 - Set Calibration
 sub Step_33
-	# Switch On Output
-	echo console on
-	$StepStateMaschine = 33
-	$P_Step = "Step " {$StepStateMaschine} " - Set Calibration"
-
 	# Declare Persistent Variables
 	persistent $LedStart = 0
 	persistent $LedStopp = 0
@@ -478,66 +760,773 @@ sub Step_33
 	persistent $ButtonStart = 0
 	persistent $ButtonStopp = 0
 	persistent $ButtonCalibrate = 0
-	persistent $StepStateMaschine = 1
+	persistent $StepStateMachine = 1
 	persistent $OpStateSLC = 0
     persistent $CalPower = 0
     persistent $MAC = "00:00:00:00:00:00"
     persistent $CalValue = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $CurrentChannel = 0
+	persistent $RampTime = 10
+
+	# Switch On Output
+	echo console on
+	$StepStateMachine = 33
+	$P_Step = "Step " $StepStateMachine " - Set Calibration for Channel " $CurrentChannel
+	console "StateMachine - Step " $StepStateMachine
 	
+	if $LedStopp == 1 and $LedStart == 1
+		$LedCalibrate = 1	
+		$LedStart = 1
+		$LedStopp = 0
+	elseif $LedStart == 1 and $LedCalibrate == 1
+		$LedCalibrate = 0	
+		$LedStart = 1
+		$LedStopp = 1
+	else 
+		$LedCalibrate = 1	
+		$LedStart = 1
+		$LedStopp = 0	
+	endif
+
     # Do
-	read smartdevice $TMPCalValue= SLC Calibration
-	console "Statemaschine - Calibration Read " $CalValue
+	gosub checkslc SLC NORMAL return $OK
+	console "StateMachine - SLC Connection " $OK
+	if $OK <> 1
+		console "StateMachine - SLC not ready"
+		$StepStateMachine = 60
+		goto outofselect
+	endif
+
+	$TMPCalValue = 0
+	read smartdevice $TMPCalValue= SLC Calibration $CurrentChannel
+	console "StateMachine - Calibration Read " $TMPCalValue
+	
+	$TMPDimValue = 0
+	write smartdevice $TMPDimValue= SLC Dimlevel $CurrentChannel
+	console "StateMachine - Dimlevel Read " $TMPDimValue
 
 	select $TMPCalValue
 	case 0
-		$StartCalibration=500
-		write smartdevice $StartCalibration= SLC Calibration
-		$StepStateMaschine=34
-	case 501 to 4094
-		$TMPCalValue=$TMPCalValue+10
-		console "Statemaschine - Calibration Value increased " $TMPCalValue
-		$StepStateMaschine=34
+		$P_Message "Calibration Step: " $TMPCalValue " / 4095"
+		$StartCalibration=750
+		write smartdevice $StartCalibration= SLC Calibration $CurrentChannel
+		wait 1
+		read smartdevice $StartCalibration= SLC Calibration $CurrentChannel
+		console "StateMachine - Start Step by Step Calibration " $StartCalibration
+		
+		gosub waitforslc $TMPCalValue
+
+		$StepStateMachine = 33
+		console "StateMachine - set Step to " $StepStateMachine
+		$TMPDimValue = 1000
+		write smartdevice $TMPDimValue= SLC Dimlevel $CurrentChannel
+		console "StateMachine - Write Dimlevel - " $TMPDimValue
+		wait $RamptTime
+		read smartdevice $TMPPowerValue= SLC PanelPower $CurrentChannel
+		console "StateMachine - Read Panel Power - " $TMPPowerValue
+		read smartdevice $TMPPLimitValue= SLC PanelPowerLimit $CurrentChannel
+		console "StateMachine - Read Panel Power Limit - " $TMPPLimitValue
+		$TMPPLimitValue = $TMPPLimitValue / 2
+		if $TMPPowerValue < $TMPPLimitValue and $CalPower > 14999
+		$StartCalibration = $StartCalibration * 2
+			write smartdevice $StartCalibration= SLC Calibration $CurrentChannel
+		endif
+		goto outofselect
+
+	case 500 to 4094
+		read smartdevice $TMPCalValue= SLC Calibration $CurrentChannel
+		$TMPCalValue = $TMPCalValue + 10
+		if $TMPCalValue > 4095 then $TMPCalValue = 4095
+		$P_Message "Calibration Step: " $TMPCalValue " / 4095"
+		write smartdevice $TMPCalValue= SLC Calibration $CurrentChannel
+		wait 1
+
+		gosub waitforslc $TMPCalValue
+
+		$TMPDimValue = 1000
+		write smartdevice $TMPDimValue= SLC Dimlevel $CurrentChannel
+		console "StateMachine - Write Dimlevel - " $TMPDimValue
+		wait $RampTime
+		read smartdevice $TMPPowerValue= SLC PanelPower $CurrentChannel
+		console "StateMachine - Read Panel Power - " $TMPPowerValue
+		read smartdevice $TMPPLimitValue= SLC PanelPowerLimit $CurrentChannel
+		console "StateMachine - Read Panel Power Limit - " $TMPPLimitValue
+
+		$LLimit = $TMPPLimitValue * 0.9
+		$HLimit = $TMPPLimitValue * 1.1
+		
+		if $TMPPowerValue > $LLimit and $TMPPowerValue < $HLimit
+			$StepStateMachine=50
+			console "StateMachine - Go Step " $StepStateMachine
+		elseif $TMPPowerValue >= $HLimit
+			$TMPCalValue = $TMPCalValue - 11 # minus 11 and next round + 10 equals to - 1 and try again
+			gosub waitforslc $TMPCalValue
+			write smartdevice $TMPCalValue= SLC Calibration $CurrentChannel
+			$StepStateMachine=33
+			console "StateMachine - Go Step " $StepStateMachine
+		else
+			$TMPPLimitValue = $TMPPLimitValue / 2
+			if $TMPPowerValue < $TMPPLimitValue and $CalPower > 14999
+				$TMPCalValue = $TMPCalValue * 2
+				write smartdevice $TMPCalValue= SLC Calibration $CurrentChannel
+			endif
+			$StepStateMachine=33	
+			console "StateMachine - Go Step " $StepStateMachine
+		endif
+		
+		goto outofselect
+
 	case 4095
-		console "Statemaschine - Calibration maximum " $TMPCalValue
-		$StepStateMaschine=55
+		console "StateMachine - Calibration maximum " $TMPCalValue
+		$StepStateMachine=34
+		goto outofselect
+
+	case *
+		console "StateMachine - undefined Value " $TMPCalValue
+		goto outofselect
+
 	endselect
 
+	target outofselect
+
     # Next Step
-	console "Statemaschine - Step " $StepStateMaschine
 	gosub input
 	if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMaschine == 0
+		$StepStateMachine = 0
 	elseif $Reset == 1
 		$CalPower = 0
+		$StepStateMachine = 0
 	endif
 
     # Jump
     gosub output
-    select $StepStateMaschine
+    select $StepStateMachine
     case 33
-		start timer "StateMaschine" in "1s" StateMaschine:Step_33
-        console " Statemaschine - wait for change"
+		start timer "StateMachine" in "1s" StateMachine:Step_33
+        console "StateMachine - wait for change"
 	case 34
-		start timer "StateMaschine" in "1s" StateMaschine:Step_34
-        console " Statemaschine - next Step " $StepStateMaschine
-	case 55
-		start timer "StateMaschine" in "1s" StateMaschine:Step_55
-        console " Statemaschine - next Step " $StepStateMaschine
+		start timer "StateMachine" in "1s" StateMachine:Step_34
+		console "StateMachine - next Step " $StepStateMachine
+	case 50
+		start timer "StateMachine" in "1s" StateMachine:Step_50
+		console "StateMachine - next Step " $StepStateMachine
 	case *
-		$StepStateMaschine = 0
-		start timer "StateMaschine" in "1s" StateMaschine
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
 	endselect
 endsub
 
-######## Sub Function - No StateMaschine Steps ########
-# Set Output
-sub output
-	# Switch On Output
-	echo console on
+# Step 34 - SLC Calibration Error
+sub Step_34
 	# Declare Persistent Variables
 	persistent $LedStart = 0
 	persistent $LedStopp = 0
 	persistent $LedCalibrate = 0
+	persistent $ButtonStart = 0
+	persistent $ButtonStopp = 0
+	persistent $ButtonCalibrate = 0
+	persistent $StepStateMachine = 1
+	persistent $OpStateSLC = 0
+    persistent $CalPower = 0
+    persistent $MAC = "00:00:00:00:00:00"
+    persistent $CalValue = 0
+	persistent $BTN_PWR1 = 0
+	persistent $BTN_PWR2 = 0
+	persistent $BTN_PWR3 = 0
+	persistent $BTN_PWR4 = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 5000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $Reset = 0
+
+	# Switch On Output
+	echo console on
+    $StepStateMachine = 34
+	$P_Step = "Step " {$StepStateMachine} " - Maximum Calibration reached"
+	$P_Message = "No Calibration possible"
+
+    # Do
+	$TempVal = 0
+	write smartdevice $TempVal= SLC Dimlevel
+    
+    # Next Step
+	console "StateMachine - Step " $StepStateMachine
+	gosub input
+	if $ButtonStopp <> 1 or $BTN_Stop == 1
+		$StepStateMachine == 0
+	    console "StateMachine - Stopp Button pressed"
+		$P_Message = "Stop Button pressed - Exit Cycle"
+	elseif $Reset == 1
+		$CalPower = 0
+		console "StateMachine - GUI Reset Button"
+	endif
+
+    # Jump
+    gosub output
+    select $StepStateMachine
+    case 34
+		start timer "StateMachine" in "1s" StateMachine:Step_34
+        console " StateMachine - wait for change"
+		$P_Message = "wait for User Input"
+	case 60
+		start timer "StateMachine" in "1s" StateMachine:Step_60
+        console " StateMachine - wait for SLC Unplugging"
+		$P_Message = "disconnect the Luminaire"
+	case *
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+		$P_Message = "undefined Jump to Step - Restart StateMachine"
+	endselect
+endsub
+
+# Step 40 - Run Test
+sub Step_40
+	# Declare Persistent Variables
+	persistent $LedStart = 0
+	persistent $LedStopp = 0
+	persistent $LedCalibrate = 0
+	persistent $ButtonStart = 0
+	persistent $ButtonStopp = 0
+	persistent $ButtonCalibrate = 0
+	persistent $StepStateMachine = 1
+	persistent $OpStateSLC = 0
+    persistent $CalPower = 0
+    persistent $MAC = "00:00:00:00:00:00"
+    persistent $CalValue = 0
+	persistent $BTN_PWR1 = 0
+	persistent $BTN_PWR2 = 0
+	persistent $BTN_PWR3 = 0
+	persistent $BTN_PWR4 = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 5000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $Reset = 0
+	persistent $LastCalibration = 0
+	persistent $CurrentChannel = 0
+
+	# Switch On Output
+	echo console on
+    $StepStateMachine = 40
+	$P_Step = "Step " {$StepStateMachine} " - Test Channel " $CurrentChannel
+	$P_Message = "Run Test with Last Calibration " $LastCalibration
+
+    # Do
+	if $LedStopp == 1 and $LedStart == 1
+		$LedCalibrate = 1	
+		$LedStart = 1
+		$LedStopp = 0
+	elseif $LedStart == 1 and $LedCalibrate == 1
+		$LedCalibrate = 0	
+		$LedStart = 1
+		$LedStopp = 1
+	else 
+		$LedCalibrate = 1	
+		$LedStart = 1
+		$LedStopp = 0	
+	endif
+
+	gosub checkslc SLC NORMAL
+	console "StateMachine - LastCalibraton: "$LastCalibration " and Current Channel " $CurrentChannel
+	write smartdevice $LastCalibration= SLC Calibration $CurrentChannel
+	gosub waitforslc $LastCalibration
+	$TMPCalValue = 0
+	read smartdevice $TMPCalValue= SLC Calibration
+
+    # Next Step
+	console "StateMachine - Step " $StepStateMachine
+	gosub input
+	if $ButtonStopp <> 1 or $BTN_Stop == 1
+		$StepStateMachine == 0
+	    console "StateMachine - Stopp Button pressed"
+		$P_Message = "Stop Button pressed - Exit Cycle"
+	elseif $Reset == 1
+		$CalPower = 0
+		console "StateMachine - GUI Reset Button"
+	elseif $LastCalibration == $TMPCalValue
+		$StepStateMachine = 50
+	endif
+
+    # Jump
+    gosub output
+    select $StepStateMachine
+    case 40
+		start timer "StateMachine" in "1s" StateMachine:Step_40
+        console " StateMachine - wait for change"
+	case 50
+		start timer "StateMachine" in "1s" StateMachine:Step_50
+		console "Statemachine - Test Run done - go ahead"
+	case *
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+		$P_Message = "undefined Jump to Step - Restart StateMachine"
+	endselect
+endsub
+
+# Step 50 - Calibration Done
+sub Step_50
+	# Declare Persistent Variables
+	persistent $LedStart = 0
+	persistent $LedStopp = 0
+	persistent $LedCalibrate = 0
+	persistent $ButtonStart = 0
+	persistent $ButtonStopp = 0
+	persistent $ButtonCalibrate = 0
+	persistent $StepStateMachine = 1
+	persistent $OpStateSLC = 0
+    persistent $CalPower = 0
+    persistent $MAC = "00:00:00:00:00:00"
+    persistent $CalValue = 0
+	persistent $BTN_PWR1 = 0
+	persistent $BTN_PWR2 = 0
+	persistent $BTN_PWR3 = 0
+	persistent $BTN_PWR4 = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 5000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $Reset = 0
+	persistent $CurrentChannel = 0
+	persistent $LastCalibration = 0
+
+	# Switch On Output
+	echo console on
+    $StepStateMachine = 50
+	console "StateMachine - Step " $StepStateMachine
+	$P_Step = "Step " {$StepStateMachine} " - Calibration Done " $CurrentChannel
+
+    # Do
+	$OK = 0
+	gosub checkslc SLC NORMAL return $OK
+	if $OK
+		if $CurrentChannel == 0 then $CurrentChannel = 1
+		read smartdevice $LastCalibration= SLC Calibration $CurrentChannel
+	endif
+
+	$TMPDimValue = 1000
+	write smartdevice $TMPDimValue= SLC Dimlevel
+	console "StateMachine - Write Dimlevel - " $TMPDimValue
+	wait $RampTime
+
+	# 0 =not calibrated, 1= running, 2= done, 3 = error
+	$CalStatus=0
+	read smartdevice $CalStatus= SLC CalibrationStatus $CurrentChannel
+	console "StateMachine - Calibration Status " $CalStatus
+	select $CalStatus
+	case 2
+		$P_Message = "Calibration Successfull"
+	case *
+		$P_Message = "Calibration Error"
+	endselect	
+
+    # Next Step
+	gosub input
+	if $ButtonStopp <> 1 or $BTN_Stop == 1
+		$StepStateMachine = 0
+	    console "StateMachine - Stopp Button pressed"
+		$P_Message = "Stop Button pressed - Exit Cycle"
+	elseif $Reset == 1
+		$CalPower = 0
+		console "StateMachine - GUI Reset Button"
+	else
+		console $StepStateMachine " - go ahead"
+		$StepStateMachine = 55
+	endif
+
+    # Jump
+    gosub output
+    select $StepStateMachine
+    case 50
+		start timer "StateMachine" in "1s" StateMachine:Step_50
+        console " StateMachine - wait for change"
+	case 55
+		start timer "StateMachine" in "1s" StateMachine:Step_55
+	case *
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+		$P_Message = "undefined Jump to Step - Restart StateMachine"
+	endselect
+endsub
+
+# Step 55 - Panel Power +-10%
+sub Step_55
+	# Declare Persistent Variables
+	persistent $LedStart = 0
+	persistent $LedStopp = 0
+	persistent $LedCalibrate = 0
+	persistent $ButtonStart = 0
+	persistent $ButtonStopp = 0
+	persistent $ButtonCalibrate = 0
+	persistent $StepStateMachine = 1
+	persistent $OpStateSLC = 0
+    persistent $CalPower = 0
+    persistent $MAC = "00:00:00:00:00:00"
+    persistent $CalValue = 0
+	persistent $BTN_PWR1 = 0
+	persistent $BTN_PWR2 = 0
+	persistent $BTN_PWR3 = 0
+	persistent $BTN_PWR4 = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 5000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $Reset = 0
+	persistent $RampTime = 10
+	persistent $CurrentChannel = 0
+
+	# Switch On Output
+	echo console on
+    $StepStateMachine = 55
+	$P_Step = "Step " {$StepStateMachine} " - CheckPanel Power"
+	$P_Message = "Check Panel Power"
+
+    # Do
+	$OK = 0
+	gosub checkslc SLC NORMAL return $OK
+	
+	read smartdevice $TMPDimValue= SLC Dimlevel $CurrentChannel
+	select $TMPDimValue
+	case 0 to 999
+		$TMPDimValue = 1000
+		write smartdevice $TMPDimValue= SLC Dimlevel $CurrentChannel
+		console "StateMachine - Write Dimlevel - " $TMPDimValue
+		wait $RampTime
+	case 1000
+		console "StateMachine - Dimlevel already " $TMPDimValue
+	case *
+		$TMPDimValue = 1000
+		write smartdevice $TMPDimValue= SLC Dimlevel $CurrentChannel
+		console "StateMachine - Write Dimlevel - " $TMPDimValue
+		wait $RampTime
+	endselect
+
+	read smartdevice $TMPPowerValue= SLC PanelPower $CurrentChannel
+	console "StateMachine - Read Panel Power - " $TMPPowerValue
+	read smartdevice $TMPPLimitValue= SLC PanelPowerLimit $CurrentChannel
+	console "StateMachine - Read Panel Power Limit - " $TMPPLimitValue
+
+	$LLimit = $TMPPLimitValue * 0.9
+    $HLimit = $TMPPLimitValue * 1.1
+
+	console "StateMachine - Calculates Low Limit " $LLimit
+	console "StateMachine - Calculates High Limit " $HLimit
+
+	if $TMPPowerValue >= 0 and $TMPPowerValue < $LLimit
+		$P_Message = "Panel Power below Range"
+		console "Panel Power below Range"
+		$BTN_Cal = 0
+		$BTN_Start = 0
+		$BTN_Stop = 1
+	elseif $TMPPowerValue >= $LLimit and $TMPPowerValue < $HLimit
+		$P_Message = "Panel Power in Range"
+		console "Panel Power in Range"
+		$BTN_Cal = 0
+		$BTN_Start = 1
+		$BTN_Stop = 0
+	elseif $TMPPowerValue >= $HLimit and $TMPPowerValue < 50000
+		$P_Message = "Panel Power above Range"
+		console "Panel Power abouve Range"
+		$BTN_Cal = 0
+		$BTN_Start = 0
+		$BTN_Stop = 1
+	else
+		$P_Message = "undefined Panel Power"
+		console "undefined Panel Power"
+	endif
+
+	# Wait for user input
+	gosub input
+	for $i = 10 to 1
+		console "wait for user input - go ahead in " $i
+		gosub input
+		if $ButtonStart == 1 or $BTN_Start == 1 
+			goto outoffor
+		endif
+		wait 1
+	next
+
+	target outoffor
+
+	# DO
+	Device.smartoffice.device_information[SLC].article_number %
+	$ArticleNumber="{$cli}"
+
+	select $ArticleNumber
+	case "MS660102MMS"
+		console "StateMachine - SLC-V2 detected - finish " $ArticleNumber
+		$StepStateMachine = 0
+	case "MS660103M"
+		console "StateMachine - SLC-V3 detected - next channel " $ArticleNumber
+		$CurrentChannel = $CurrentChannel + 1
+		if $CurrentChannel >= 1 and $CurrentChannel <= 2
+			console "StateMachine - Start Calibration for Channel " $CurrentChannel
+			$StepStateMachine = 30
+		else
+			console "StateMachine - finished " $ArticleNumber
+			$StepStateMachine = 60
+		endif
+	case "MS660104M"
+		console "StateMachine - SLC-V4 detected - next channel " $ArticleNumber
+		$CurrentChannel = $CurrentChannel + 1
+		if $CurrentChannel >= 1 and $CurrentChannel <= 6
+			console "StateMachine - Start Calibration for Channel " $CurrentChannel
+			$StepStateMachine = 30
+		else
+			console "StateMachine - finished " $ArticleNumber
+			$StepStateMachine = 60
+		endif
+	case *
+		console "StateMachine - Unknown Article Number " $ArticleNumber
+		$StepStateMachine = 0
+	endselect
+
+	$OK = 0
+	gosub checkslc SLC NORMAL return $OK
+
+	$TMPDimValue = 0
+	write smartdevice $TMPDimValue= SLC Dimlevel
+
+    # Next Step
+	console "StateMachine - Step " $StepStateMachine
+	gosub input
+	if $ButtonStopp <> 1 or $BTN_Stop == 1
+		$StepStateMachine == 0
+	    console "StateMachine - Stopp Button pressed"
+		$P_Message = "Stop Button pressed - Exit Cycle"
+	elseif $Reset == 1
+		$CalPower = 0
+		console "StateMachine - GUI Reset Button"
+	elseif $OK 
+		$TempVal = 0
+		write smartdevice $TempVal= SLC Dimlevel
+		$StepStateMachine = 60
+		console "StateMachine - Go Ahead"
+	endif
+
+    # Jump
+    gosub output
+    select $StepStateMachine
+	case 30
+		start timer "StateMachine" in "1s" StateMachine:Step_30
+    case 55
+		start timer "StateMachine" in "1s" StateMachine:Step_55
+        console "StateMachine - wait for change"
+	case 60
+		start timer "StateMachine" in "1s" StateMachine:Step_60
+        console "StateMachine - next Step " $StepStateMachine
+	case *
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+		$P_Message = "undefined Jump to Step - Restart StateMachine"
+	endselect
+endsub
+
+# Step 56 - VG BOX - Calibration = 0
+sub Step_56
+	# Declare Persistent Variables
+	persistent $LedStart = 0
+	persistent $LedStopp = 0
+	persistent $LedCalibrate = 0
+	persistent $ButtonStart = 0
+	persistent $ButtonStopp = 0
+	persistent $ButtonCalibrate = 0
+	persistent $StepStateMachine = 1
+	persistent $OpStateSLC = 0
+    persistent $CalPower = 0
+    persistent $MAC = "00:00:00:00:00:00"
+    persistent $CalValue = 0
+	persistent $BTN_PWR1 = 0
+	persistent $BTN_PWR2 = 0
+	persistent $BTN_PWR3 = 0
+	persistent $BTN_PWR4 = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 5000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $Reset = 0
+
+	# Switch On Output
+	echo console on
+    $StepStateMachine = 56
+	$P_Step = "Step " {$StepStateMachine} " - VG-Box"
+	$P_Message = "Set Calibration to 0"
+
+    # Do
+	$OK = 0
+	gosub checkslc SLC NORMAL return $OK
+    $TMPCalValue = 0
+	write smartdevice $TMPCalValue= SLC Calibration
+	wait 1
+	read smartdevice $TMPCalValue= SLC Calibration
+	console "StateMachine - Read Calibration " $TMPCalValue
+
+    # Next Step
+	console "StateMachine - Step " $StepStateMachine
+	gosub input
+	if $ButtonStopp <> 1 or $BTN_Stop == 1
+		$StepStateMachine == 0
+	    console "StateMachine - Stopp Button pressed"
+		$P_Message = "Stop Button pressed - Exit Cycle"
+	elseif $Reset == 1
+		$CalPower = 0
+		console "StateMachine - GUI Reset Button"
+	elseif $TMPCalValue == 0
+		$StepStateMachine == 60
+		console "StateMachine - Go to End"
+	endif
+
+    # Jump
+    gosub output
+    select $StepStateMachine
+    case 56
+		start timer "StateMachine" in "1s" StateMachine:Step_56
+        console " StateMachine - wait for change"
+	case 60
+		start timer "StateMachine" in "1s" StateMachine:Step_60
+	case *
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+		$P_Message = "undefined Jump to Step - Restart StateMachine"
+	endselect
+endsub
+
+# Step 60 - Wait for Disconnect SLC
+sub Step_60
+	# Declare Persistent Variables
+	persistent $LedStart = 0
+	persistent $LedStopp = 0
+	persistent $LedCalibrate = 0
+	persistent $ButtonStart = 0
+	persistent $ButtonStopp = 0
+	persistent $ButtonCalibrate = 0
+	persistent $StepStateMachine = 1
+	persistent $OpStateSLC = 0
+    persistent $CalPower = 0
+    persistent $MAC = "00:00:00:00:00:00"
+    persistent $CalValue = 0
+	persistent $BTN_PWR1 = 0
+	persistent $BTN_PWR2 = 0
+	persistent $BTN_PWR3 = 0
+	persistent $BTN_PWR4 = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 5000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	persistent $BTN_Cal = 0
+	persistent $BTN_Start = 0
+	persistent $BTN_Stop = 0
+	persistent $P_Step = "xxx"
+	persistent $P_Message = "xxx"
+	persistent $P_Progress = "xxx"
+	persistent $Reset = 0
+
+	# Switch On Output
+	echo console on
+    $StepStateMachine = 60
+	$P_Step = "Step " {$StepStateMachine} " - Waiting for disconnect SLC"
+	$P_Message = "Unplug Luminair"
+
+    # Do
+	$TempVal = 0
+	write smartdevice $TempVal= SLC Dimlevel
+
+	Protocol.lldp.received_overview[1/1].chassis_id %
+	$MAC={$cli}
+	console "StateMachine - MAC from LLDP Table Entry 1 " $MAC
+
+	Device.smartoffice.device_information[SLC].operational_state %
+	$OpStateSLC={$cli}
+    console "StateMachine - Operational State of SLC " $OpStateSLC
+
+
+	# Next Step
+	console "StateMachine - Step " $StepStateMachine
+	gosub input
+	if $ButtonStopp <> 1 or $BTN_Stop == 1
+		$StepStateMachine = 0
+	    console "StateMachine - Stopp Button pressed"
+		$P_Message = "Stop Button pressed - Exit Cycle"
+	elseif $Reset == 1
+		$CalPower = 0
+		console "StateMachine - GUI Reset Button"
+	elseif $MAC == "" and $OpStateSLC <> "NORMAL"
+		$StepStateMachine = 10
+		console "StateMachine - LLDP Table Entry empty"
+		$P_Message = "SLC Disconnected - restart cycle"
+		# Clear Smart Device ID
+		Device.smartoffice.device_config[SLC].device_id = 
+	endif
+
+    # Jump
+    gosub output
+    select $StepStateMachine
+	case 10
+		start timer "StateMachine" in "1s" StateMachine:Step_10
+		console " StateMachine - restart cycle"
+		$P_Message = "done and again"
+    case 60
+		start timer "StateMachine" in "1s" StateMachine:Step_60
+        console " StateMachine - wait for SLC Unplugging"
+		$P_Message = "disconnect the Luminaire"
+	case *
+		$StepStateMachine = 0
+		start timer "StateMachine" in "1s" StateMachine
+		$P_Message = "undefined Jump to Step - Restart StateMachine"
+	endselect
+endsub
+
+######## Sub Function - No StateMachine Steps ########
+# Set Output
+sub output
+	# Declare Persistent Variables
+	persistent $LedStart = 0
+	persistent $LedStopp = 0
+	persistent $LedCalibrate = 0
+	persistent $CalPower = 0
+	persistent $SLD_PWR1 = 3000
+	persistent $SLD_PWR2 = 15000
+	persistent $SLD_PWR3 = 25000
+	persistent $SLD_PWR4 = 50000
+	
+	# Switch On Output
+	echo console on
 	
 	# console "Write Actors"
 	write actor $LedStart SIO:1:DOUT
@@ -545,11 +1534,34 @@ sub output
 	write actor $LedCalibrate SIO:3:DOUT
 
 	# console "Write GUI Elements"
-	$BTN_PWR1 = 0
-	$BTN_PWR2 = 0
-	$BTN_PWR3 = 0
-	$BTN_PWR4 = 0
-	
+	select $CalPower
+	case {$SLD_PWR1}
+		$BTN_PWR1 = 1
+		$BTN_PWR2 = 0
+		$BTN_PWR3 = 0
+		$BTN_PWR4 = 0
+	case {$SLD_PWR2}
+		$BTN_PWR1 = 0
+		$BTN_PWR2 = 1
+		$BTN_PWR3 = 0
+		$BTN_PWR4 = 0
+	case {$SLD_PWR3}
+		$BTN_PWR1 = 0
+		$BTN_PWR2 = 0
+		$BTN_PWR3 = 1
+		$BTN_PWR4 = 0
+	case {$SLD_PWR4}
+		$BTN_PWR1 = 0
+		$BTN_PWR2 = 0
+		$BTN_PWR3 = 0
+		$BTN_PWR4 = 1
+	case *
+		$BTN_PWR1 = 0
+		$BTN_PWR2 = 0
+		$BTN_PWR3 = 0
+		$BTN_PWR4 = 0
+	endselect
+
     write gui $BTN_PWR1 BTN_UsePower1:1:POWER
 	write gui $BTN_PWR2 BTN_UsePower2:1:POWER
 	write gui $BTN_PWR3 BTN_UsePower3:1:POWER
@@ -566,10 +1578,6 @@ sub output
 	$Reset = 0
 
 	write gui $Reset BTN_Reset:1:BUTTON
-
-	write gui $P_Step TXT_Describtion:1:BUTTON
-	write gui $P_Message TXT_Message:1:BUTTON
-	write gui $P_Progress TXT_Progress:1:BUTTON
 endsub
 
 # Read Input
@@ -585,6 +1593,14 @@ sub input
 	persistent $BTN_PWR2 = 0
 	persistent $BTN_PWR3 = 0
 	persistent $BTN_PWR4 = 0
+	persistent $LastBTN_PWR1 = 0
+	persistent $LastBTN_PWR2 = 0
+	persistent $LastBTN_PWR3 = 0
+	persistent $LastBTN_PWR4 = 0
+	persistent $RTrigBTN_PWR1 = 0
+	persistent $RTrigBTN_PWR2 = 0
+	persistent $RTrigBTN_PWR3 = 0
+	persistent $RTrigBTN_PWR4 = 0
 	persistent $SLD_PWR1 = 3000
 	persistent $SLD_PWR2 = 15000
 	persistent $SLD_PWR3 = 25000
@@ -593,6 +1609,8 @@ sub input
 	persistent $BTN_Start = 0
 	persistent $BTN_Stop = 0
 	persistent $Reset = 0
+	persistent $TGL_VG_SLC = 0
+	persistent $SLD_VG_BOX = 0
 	
 	# console "Read Sensors"
 	read sensor $ButtonStart SIO:1:DIN
@@ -612,17 +1630,129 @@ sub input
 
 	read gui $Reset BTN_Reset:1:BUTTON
 
-	if $BTN_PWR1 and $SLD_PWR1 <> 0
-		$CalPower = $SLD_PWR1
-	elseif $BTN_PWR2 and $SLD_PWR2 <> 0
-		$CalPower = $SLD_PWR2
-	elseif $BTN_PWR3 and $SLD_PWR3 <> 0
-		$CalPower = $SLD_PWR3
-	elseif $BTN_PWR4 and $SLD_PWR4 <> 0
-		$CalPower = $SLD_PWR4
-	endif
-
 	read gui $BTN_Cal BTN_Calibrate:1:BUTTON
 	read gui $BTN_Start BTN_Start:1:BUTTON
 	read gui $BTN_Stop BTN_Stop:1:BUTTON
+
+	# 0 = SLC, 1 = VG-Box
+	read gui $TGL_VG_SLC TGL_VG_Box:1:BUTTON
+	read gui $SLD_VG_BOX SLD_VG_BOX:1:SLIDER
+
+	gosub R_Trig $LastBTN_PWR1 $BTN_PWR1 return $RTrigBTN_PWR1 $LastBTN_PWR1
+	gosub R_Trig $LastBTN_PWR2 $BTN_PWR2 return $RTrigBTN_PWR2 $LastBTN_PWR2
+	gosub R_Trig $LastBTN_PWR3 $BTN_PWR3 return $RTrigBTN_PWR3 $LastBTN_PWR3
+	gosub R_Trig $LastBTN_PWR4 $BTN_PWR4 return $RTrigBTN_PWR4 $LastBTN_PWR4
+
+	if $RTrigBTN_PWR1 and $SLD_PWR1 <> 0
+		$CalPower = $SLD_PWR1
+		console "StateMachine - Pannel Power Limit set to " $CalPower
+		$TempVal=$CalPower / 1000
+		Device.controller.smartlight_config[SLC].panel_power_limit = {$TempVal}
+	elseif $RTrigBTN_PWR2 and $SLD_PWR2 <> 0
+		$CalPower = $SLD_PWR2
+		console "StateMachine - Pannel Power Limit set to " $CalPower
+		$TempVal=$CalPower / 1000
+		Device.controller.smartlight_config[SLC].panel_power_limit = {$TempVal}
+	elseif $RTrigBTN_PWR3 and $SLD_PWR3 <> 0
+		$CalPower = $SLD_PWR3
+		console "StateMachine - Pannel Power Limit set to " $CalPower
+		$TempVal=$CalPower / 1000
+		Device.controller.smartlight_config[SLC].panel_power_limit = {$TempVal}
+	elseif $RTrigBTN_PWR4 and $SLD_PWR4 <> 0
+		$CalPower = $SLD_PWR4
+		console "StateMachine - Pannel Power Limit set to " $CalPower
+		$TempVal=$CalPower / 1000
+		Device.controller.smartlight_config[SLC].panel_power_limit = {$TempVal}
+	endif
 endsub
+
+sub R_Trig $Last $Current
+	if $Last < $Current
+		$Trigger = 1
+		$NewLast = $Current
+	else
+		$Trigger = 0
+		$NewLast = $Current
+	endif
+endsub $Trigger $NewLast
+
+sub F_Trig $Last $Current
+	if $Last > $Current
+		$Trigger = 1
+		$NewLast = $Current
+	else
+		$Trigger = 0
+		$NewLast = $Current
+	endif
+endsub $Trigger
+
+sub waitforslc $TMPCalValue
+	# Switch On Output
+	echo console on
+	# Declare Persistent Variables
+	persistent $StepStateMachine = 1
+	persistent $ButtonStopp = 0
+	persistent $BTN_Stop = 0
+	persistent $Reset = 0
+	persistent $CalPower = 0
+
+	for $i=30 to 1
+		console "StateMachine - Wait for SLC internal measurement - Case " $TMPCalValue " - " $i
+		gosub input
+		gosub checkslc SLC NORMAL return $SLCOK
+
+		if $ButtonStopp <> 1 or $BTN_Stop == 1
+			$StepStateMachine = 0
+			console "StateMachine - Stop Button pressed"
+			break
+		elseif $Reset == 1
+			$CalPower = 0
+			$StepStateMachine = 0
+			console "StateMachine - Reset detected"
+			break
+		elseif $SLCOK
+			console "StateMachine - SLC disconneted"
+			break
+		endif
+		$TMPDimValue = 0
+		read smartdevice $TMPDimValue= SLC Dimlevel
+		if $TMPDimValue == 200
+			console "StateMachine - SLC finished"
+			break
+		else
+			wait 1
+		endif
+
+		if $LedStopp == 1 and $LedStart == 1
+			$LedCalibrate = 1	
+			$LedStart = 1
+			$LedStopp = 0
+		elseif $LedStart == 1 and $LedCalibrate == 1
+			$LedCalibrate = 0	
+			$LedStart = 1
+			$LedStopp = 1
+		else 
+			$LedCalibrate = 1	
+			$LedStart = 1
+			$LedStopp = 0	
+		endif
+
+		gosub output
+	next
+endsub
+
+sub checkslc $Name $OperationalState
+	# Switch On Output
+	echo console on
+	# Declare Persistent Variables
+	persistent $StepStateMachine = 1
+	Device.smartoffice.device_information[{$Name}].operational_state %
+
+	$OpStateSLC={$cli}
+	if $OpStateSLC <> $OperationalState
+		console "StateMachine - "$StepStateMachine " Operational State not NORMAL: " $OpStateSLC
+		$OK = 1
+	else 
+		$OK = 0
+	endif
+endsub $OK
