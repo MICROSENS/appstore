@@ -1,0 +1,49 @@
+# BacnetLighting
+# admin, last change: 2025-05-14 07:28:42
+
+sub SingleColor $Zone
+	echo console on
+	dump event
+	dump var
+	# set $Dimlevel=C9
+	read sensorgroup $Dimlevel Bacnet_Dimlevel_Zone_{$Zone}
+	limit $Dimlevel 0 100
+	# Dimlevel from Bacnet = 0..100% -> transformed to 0..1000
+	$Dimlevel = $Dimlevel * 10
+	# Write Dimlevel to actorgroup
+	debug "Zone " $Zone "   DimLevel=" $Dimlevel " SingleColor"
+	write actorgroup $Dimlevel Dimlevel_Zone_{$Zone}
+endsub
+
+sub DualColor $Zone
+	echo console on
+	dump event
+	dump var
+	# set $Dimlevel=C9
+	read sensorgroup $Dimlevel Bacnet_Dimlevel_Zone_{$Zone}
+	limit $Dimlevel 0 100
+	# Dimlevel from Bacnet = 0..100% -> transformed to 0..1000
+	$Dimlevel = $Dimlevel * 10
+	# Color read from Bacnet
+	read sensorgroup $Color Bacnet_Color_Zone_{$Zone}
+	gosub TransformDimlevel $Dimlevel $Color expect $Warm $Cold
+	debug "Zone " $Zone "   DimLevel=" $Dimlevel " --> Cold=" $Cold "  Warm=" $Warm
+	write actorgroup $Cold Dimlevel_Zone_{$Zone}_Cold
+	write actorgroup $Warm Dimlevel_Zone_{$Zone}_Warm
+endsub
+
+sub TransformDimlevel $InDimLevel $Color
+	echo console on
+	dump event
+	dump var
+	persistent $P_YH
+	persistent $P_C
+	persistent $P_B
+	persistent $P_A
+	tointeger $Color
+	limit $Color 3000 6000
+	float $ColdFactor = ($Color - 3000)/3000
+	float $WarmFactor = 1-$ColdFactor
+	integer $ColdDimLevel =  1000*((ln(($ColdFactor * $P_A * exp($P_B * $InDimLevel/1000) + $ColdFactor * $P_C - $P_C) / $P_A))/ $P_B)
+	integer $WarmDimLevel =  1000*((ln(($WarmFactor * $P_A * exp($P_B * $InDimLevel/1000) + $WarmFactor * $P_C - $P_C) / $P_A))/ $P_B)
+endsub $WarmDimLevel $ColdDimLevel

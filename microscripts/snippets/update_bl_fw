@@ -1,0 +1,87 @@
+MAC=0060a70dd1fa0043
+IPv6=fe80::260:a7ff:fe0d:d1fa
+x64bl=bl_cslc4_64_v3_0.bin
+bl=bl_cslc4_v3_3a_rn521_1.bin
+fw=CSLC9189N_v7_3a_rn521_1.bin
+
+smudpset -ex -d $MAC -o bootloaderupload 30
+sleep 3
+tftp -p -l $x64bl $IPv6
+sleep 35
+smudpset -ex -d $MAC -o reset 2
+sleep 6
+tftp -p -l $fw $IPv6
+sleep 10
+smudpset -ex -d $MAC -o bootloaderupload 30
+sleep 6
+tftp -p -l $bl $IPv6
+
+--------
+
+MAC=0060A70DE2F50043
+IPv6=fe80::260:a7ff:fe0d:e2f5
+bubl=bubl_sdioc_v2_0.bin
+fw=SDIOC_P_v7_1a_rn521.bin
+
+smudpset -ex -d $MAC -o reset 2
+sleep 5
+tftp -p -l $bubl $IPv6
+sleep 5
+tftp -p -l $fw $IPv6
+sleep 30
+smudpget -ex -d $MAC -o FirmwareVersion
+smudpget -ex -d $MAC -o Bootloaderversion
+
+--------
+
+MAC=0060A70CE2F50043
+IPv6=fe80::260:a7ff:fe0c:e2f5
+bubl=bubl_sioc_v3_0.bin
+fw=SIOC_O_v7_2a_rn509.bin
+
+smudpset -ex -d $MAC -o reset 2
+sleep 5
+tftp -p -l $bubl $IPv6
+sleep 5
+tftp -p -l $fw $IPv6
+sleep 30
+smudpget -ex -d $MAC -o FirmwareVersion
+smudpget -ex -d $MAC -o Bootloaderversion
+
+--------
+
+MAC=0060A7??????0043
+IPv6=fe80::260:a7ff:fe??:????
+x64bl=bl_cslc4_64_v3_0.bin
+bl=bl_cslc4_v3_3a_rn501_1.bin
+fw=CSLC9189N_v7_3a_rn521_1.bin
+
+smudpset -ex -d $MAC -o bootloaderupload 30
+sleep 3
+tftp -p -l $x64bl $IPv6
+sleep 6
+tftp -p -l $fw $IPv6
+smudpset -ex -d $MAC -o bootloaderupload 30
+sleep 3
+tftp -p -l $bl $IPv6
+
+--------
+
+clear
+
+MAC=0060A70C55F6
+IPv6=fe80::260:a7ff:fe0c:55f6
+
+fw=SLCv3v4_LM_v7_1i.bin # eigentlich SLCv3v4_LM_v7_1i_rc483.bin, aber der Filename ist dem tftp Server (SLC) in einigen Versionen zu lang
+bl=bl_SLCv34v2_4.bin
+
+smudpset -ex -d $MAC -o reset 2
+sleep 6
+tftp -p -l $fw $IPv6
+sleep 10
+smudpset -ex -d $MAC -o bootloaderupload 30
+sleep 6
+tftp -p -l $bl $IPv6
+sleep 45
+smudpget -ex -d $MAC -o FirmwareVersion
+smudpget -ex -d $MAC -o BootloaderVersion

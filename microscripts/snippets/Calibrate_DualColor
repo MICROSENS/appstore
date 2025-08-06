@@ -1,0 +1,21 @@
+#!/bin/bash
+
+rm trash
+# SLC-V2 nur ein Port!
+array=( 0060A70BBB70 0060A70BBB80 0060A70BBB72 0060A70BBB73 0060A70BBB74 0060A70C5055 0060A70BBB75 0060A70BBB76 0060A70C5056 0060A70C5057 0060A70BBB77 0060A70BBB78 0060A70C5058 0060A70BBB69 0060A70C5059 0060A70C505A 0060A70BBB6A 0060A70BBB7B 0060A70C501B 0060A70BBB7C 0060A70BBB7D 0060A70BBB6D 0060A70BBB7E 0060A70BBB7F 0060A70BBB6F 0060A70BBB6C  )
+
+for MAC in ${array[*]}
+do
+	smudpset -ex -d ${MAC} -o Dimlevel 0 > trash # alle Ports abschalten, damit keine Mischmessunge entsteht
+done
+
+j=0
+
+for MAC in ${array[*]}
+do
+	echo "MAC : " `smudpget -ex -d $MAC -o uptime` " - PanelPowerLimit - Calibration - PanelPower - Dimlevel"
+	echo ${array[j]} ": " `smudpget -ex -d $MAC -o PanelPowerLimit` " - " `smudpget -ex -d $MAC -o Calibration` " - " `smudpget -ex -d $MAC -o PanelPower` " - " `smudpget -ex -d $MAC -o Dimlevel`
+	((j++))
+done
+
+rm trash

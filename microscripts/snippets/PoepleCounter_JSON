@@ -1,0 +1,67 @@
+
+#$TestJSON="{  "rule": "PeopleCounter",  "timestamp": 513083806,  "timestamp": 513084846,  "state": true,  "originator": {    "serialnumber": "DHD308-00545605",    "ip": "10.100.85.119"  },  "data": {    "region": 0,    "regionName": "1",    "type": "people",    "count": 0  }"
+$TestJSON="{  ""rule"": ""PeopleCounter"",  ""timestamp"": 513083806,  ""timestamp"": 513084846,  ""state"": true,  ""originator"": {  ""serialnumber"": ""DHD308-00545605"",    ""ip"": ""10.100.85.119""  },  ""data"": {    ""region"": 0,    ""regionName"": ""1"",    ""type"": ""people"",    ""count"": 0  }"
+
+gosub DecodeJSON $TestJSON
+end
+
+
+sub DecodeJSON $JSON
+echo console on
+debug "{$yellow}Decode JSON from tablet. Response: " $JSON "{$normal}"
+
+if $JSON = "" then endsub
+#--- check if any change first, only then proceed
+find $Begin $JSON "AnythingChanged"":false" 1,E
+if $Begin>1 then endsub
+
+# list of keywords that we understand
+$Key1 = "rule,Exec_Rule"
+$Key2 = "timestamp,Exec_Timestamp"
+$Key3 = "ip,Exec_IP"
+$Key4 = "count,Exec_Count"
+$NumKeys=4 #<----------------------------------
+
+$End=1 
+for $I=1 to $NumKeys
+	list get $Keyword $Key{$I},1 # get Dotstring 
+#	find $Begin $JSON "{$Keyword}"":" $End,E  #JSON is in order
+	find $Begin $JSON "{$Keyword}"":" 1,E
+	if $Begin
+		find $End  $JSON "," $Begin,B
+		if $End
+			$End=$End-1
+		else
+			find $End  $JSON "}" $Begin,B
+			$End=$End-1
+		endif
+		extract $Result =  $JSON $Begin $End O
+		trim $Result
+	#	debug $Keyword "=" $Result
+		list get $Sub $Key{$I},2 # get subroutine 
+		gosub {$Sub} $Result
+	else
+		debug "Keyword " $Keyword " not found"
+	endif
+endloop
+endsub
+
+
+sub Exec_Rule $Rule
+output $Rule
+	register sensor "PoepleCounter.1.COUNT" 0 ""
+endsub
+
+sub Exec_IP $IP
+output "IP: " $IP
+endsub
+
+sub Exec_Timestamp $Val
+#	write dotstring $Val "app.Smartdirector.tablet_status.language"
+output "Timestamp: " $Val
+endsub
+
+sub Exec_Count $Val
+output "Poeple Count: " $Val
+	write sensor $Val "PoepleCounter.1.COUNT"
+endsub

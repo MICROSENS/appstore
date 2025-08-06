@@ -1,0 +1,25 @@
+# PanicLight
+# admin, last change: 2025-08-06 09:14:51
+
+echo console on
+gosub PanicButton 1 return $val
+console $val
+
+
+sub PanicButton $Zone
+    $groupname = Button_{$Zone}
+    read sensorgroup $val $groupname maximum_value
+    $groupname = ButtonLight_{$Zone}
+    write actorgroup $val $groupname
+    $on=1000
+    $off=0
+    if $val <> 0
+    # hier müsste eigentlich "activate Scene All Off" stehen, um alles abzuschalten
+        write actorgroup $off Dimlevel_Zone_1
+        write actorgroup $on Panic_Light
+    else
+    # hier müsste eigentlich "active Scene Auto" stehen, um wieder in den normalen Modus zurück zu gehen
+        write actorgroup $on Dimlevel_Zone_1
+        write actorgroup $off Panic_Light
+    endif
+endsub $val
