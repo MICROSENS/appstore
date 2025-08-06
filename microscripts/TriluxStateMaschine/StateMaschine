@@ -966,7 +966,7 @@ sub Step_34
 	console "StateMachine - Step " $StepStateMachine
 	gosub input
 	if $ButtonStopp <> 1 or $BTN_Stop == 1
-		$StepStateMachine == 0
+		$StepStateMachine == 60
 	    console "StateMachine - Stopp Button pressed"
 		$P_Message = "Stop Button pressed - Exit Cycle"
 	elseif $Reset == 1
@@ -1269,6 +1269,7 @@ sub Step_55
 	gosub input
 	for $i = 10 to 1
 		console "wait for user input - go ahead in " $i
+		# Ausgabe von "Start drücken um weiter zu gehen und automatisch in 10 gehts weiter" einfügen
 		gosub input
 		if $ButtonStart == 1 or $BTN_Start == 1 
 			goto outoffor
