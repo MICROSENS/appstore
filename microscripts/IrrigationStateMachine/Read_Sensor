@@ -1,0 +1,247 @@
+# Read_Sensor
+# admin, last change: 2025-07-21 15:44:37
+
+# Known Issue:
+# - ONLY 15 Entries in Histroy Table allowed -> Chan 0 .. 14
+
+persistent $MuxChannel = 1
+persistent $MuxChan0 = 0
+persistent $MuxChan1 = 0
+persistent $MuxChan2 = 0
+persistent $MuxChan3 = 0
+persistent $MuxChan4 = 0
+persistent $MuxChan5 = 0
+persistent $MuxChan6 = 0
+persistent $MuxChan7 = 0
+persistent $MuxChan8 = 0
+persistent $MuxChan9 = 0
+persistent $MuxChan10 = 0
+persistent $MuxChan11 = 0
+persistent $MuxChan12 = 0
+persistent $MuxChan13 = 0
+persistent $MuxChan14 = 0
+persistent $MuxChan15 = 0
+persistent $Gauge11 = 0
+persistent $Gauge12 = 0
+persistent $Gauge21 = 0
+persistent $Gauge31 = 0
+persistent $Gauge32 = 0
+persistent $Gauge41 = 0
+persistent $Gauge42 = 0
+persistent $Gauge51 = 0
+persistent $Gauge52 = 0
+persistent $Gaugeref11 = 0
+persistent $Gaugeref12 = 0
+persistent $Gaugeref21 = 0
+persistent $Gaugeref31 = 0
+persistent $Gaugeref32 = 0
+persistent $Gaugeref41 = 0
+persistent $Gaugeref42 = 0
+persistent $Gaugeref51 = 0
+persistent $Gaugeref52 = 0
+persistent $Pump = 0
+
+stop timer "readwrite"
+
+echo console on
+
+$SIOD1="SIOD1"
+$SIOC1="SIOC"
+$DOUT="DOUT"
+$AIN="AIN"
+$DIN="DIN"
+$AINInstance="1"
+$null=0
+$eins=1
+$Humidity=0.0
+$LastChan=8 # Zero Based Counting! -> here chan 1 to 9 -> 8 channels
+
+select $MuxChannel
+case 0
+    console "--- Start new round ---"
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan0 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan0
+case 1
+    write actor $eins "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan1 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan1
+case 2
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $eins "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan2 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan2
+case 3
+    write actor $eins "{$SIOD1}:1:{$DOUT}"
+    write actor $eins "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan3 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan3
+case 4
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $eins "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan4 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan4
+case 5
+    write actor $eins "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $eins "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan5 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan5
+case 6
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $eins "{$SIOD1}:2:{$DOUT}"
+    write actor $eins "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan6 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan6
+case 7
+    write actor $eins "{$SIOD1}:1:{$DOUT}"
+    write actor $eins "{$SIOD1}:2:{$DOUT}"
+    write actor $eins "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan7 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan7
+case 8
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $eins "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan8 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan8
+case 9
+    write actor $eins "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $eins "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan9 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan9
+case 10
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $eins "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $eins "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan10 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan10
+case 11
+    write actor $eins "{$SIOD1}:1:{$DOUT}"
+    write actor $eins "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $eins "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan11 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan11
+case 12
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $eins "{$SIOD1}:3:{$DOUT}"
+    write actor $eins "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan12 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan12
+case 13
+    write actor $eins "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $eins "{$SIOD1}:3:{$DOUT}"
+    write actor $eins "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan13 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan13
+case 14
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $eins "{$SIOD1}:2:{$DOUT}"
+    write actor $eins "{$SIOD1}:3:{$DOUT}"
+    write actor $eins "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan14 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan14
+case 15
+    write actor $eins "{$SIOD1}:1:{$DOUT}"
+    write actor $eins "{$SIOD1}:2:{$DOUT}"
+    write actor $eins "{$SIOD1}:3:{$DOUT}"
+    write actor $eins "{$SIOD1}:4:{$DOUT}"
+    wait 500000
+    read sensor $Humidity "{$SIOC1}:{$AINInstance}:{$AIN}"
+    $MuxChan15 = $Humidity
+    console "Chan: " $MuxChannel " - " $MuxChan15
+    $MuxChannel=0
+case *
+    write actor $null "{$SIOD1}:1:{$DOUT}"
+    write actor $null "{$SIOD1}:2:{$DOUT}"
+    write actor $null "{$SIOD1}:3:{$DOUT}"
+    write actor $null "{$SIOD1}:4:{$DOUT}"
+    $MuxChannel=0
+endselect
+
+# Anzeige auf der GUI aktualisieren
+$Gauge11=$MuxChan0
+$Gauge12=$MuxChan1
+$Gauge21=$MuxChan2
+$Gauge31=$MuxChan3
+$Gauge32=$MuxChan4
+$Gauge41=$MuxChan5
+$Gauge42=$MuxChan6
+$Gauge51=$MuxChan7
+$Gauge52=$MuxChan8
+
+$Gaugeref11=75
+$Gaugeref12=75
+$Gaugeref21=75
+$Gaugeref31=75
+$Gaugeref32=75
+$Gaugeref41=75
+$Gaugeref42=75
+$Gaugeref51=75
+$Gaugeref52=75
+
+$MuxChannel = $MuxChannel + 1
+wait 1
+
+# Check Limits
+if $MuxChannel > $LastChan then $MuxChannel = 0
+
+read sensor $killbutton "{$SIOD1}:1:{$DIN}"
+
+if $killbutton
+    console "Readwrite is done"
+else
+    start timer "readwrite" in "1s" {$filename}
+endif

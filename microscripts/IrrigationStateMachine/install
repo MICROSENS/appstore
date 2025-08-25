@@ -1,0 +1,1176 @@
+# install
+# admin, last change: 2025-07-15 10:23:47
+
+# set_device_system.ms
+# microscript to configure basic Device.system values
+# generation device: 00:60:A7:0A:8B:DE
+# generation date  : 2025-07-15 10:25:36
+# ACTION: Device.system.show_time_date = 0
+# ACTION: Device.system.set_time = 00:00:00
+# ACTION: Device.system.set_date = 2012-01-01
+# ACTION: Device.system.send_wake_on_lan_packet = 
+
+Device.system.autorun_cli_script = StateMachine
+
+# set_running_device_poe_config.ms
+# created from running config
+# microscript to configure Device.poe.config values
+# generation device: 00:60:A7:0A:8C:0F
+# generation date  : 2025-07-18 13:14:29
+Device.poe.config[1/1].mode = AUTOMATIC
+Device.poe.config[1/2].mode = AUTOMATIC
+Device.poe.config[1/3].mode = AUTOMATIC
+Device.poe.config[1/4].mode = AUTOMATIC
+Device.poe.config[1/5].mode = DISABLED
+Device.poe.config[1/6].mode = DISABLED
+Device.poe.config[1/1].priority_port = Disabled
+Device.poe.config[1/2].priority_port = Disabled
+Device.poe.config[1/3].priority_port = Disabled
+Device.poe.config[1/4].priority_port = Disabled
+Device.poe.config[1/5].priority_port = Disabled
+Device.poe.config[1/6].priority_port = Disabled
+Device.poe.config[1/1].enable_poe_plus = LLDP_CONTROLLED
+Device.poe.config[1/2].enable_poe_plus = LLDP_CONTROLLED
+Device.poe.config[1/3].enable_poe_plus = LLDP_CONTROLLED
+Device.poe.config[1/4].enable_poe_plus = LLDP_CONTROLLED
+Device.poe.config[1/5].enable_poe_plus = LLDP_CONTROLLED
+Device.poe.config[1/6].enable_poe_plus = LLDP_CONTROLLED
+
+# set_running_management_web_gui_page.ms
+# created from running config
+# microscript to configure Management.web.gui_page values
+# generation device: 00:60:A7:0A:8B:DE
+# generation date  : 2025-07-15 10:16:02
+
+Management.web.gui_page[*].name = 
+
+Management.web.gui_page[*].name = Home
+Management.web.gui_page[Home].style_name = SmartOffice
+Management.web.gui_page[Home].element_placement = CHAINED
+Management.web.gui_page[Home].limited_to_users = 
+Management.web.gui_page[Home].options = pborder=0, bborder=8, shadow=#212121
+Management.web.gui_page[*].name = TestRun
+Management.web.gui_page[TestRun].style_name = style1
+Management.web.gui_page[TestRun].element_placement = CHAINED
+Management.web.gui_page[TestRun].limited_to_users = 
+Management.web.gui_page[TestRun].options = 
+Management.web.gui_page[*].name = Config
+Management.web.gui_page[Config].style_name = style1
+Management.web.gui_page[Config].element_placement = CHAINED
+Management.web.gui_page[Config].limited_to_users = 
+Management.web.gui_page[Config].options = 
+
+# set_running_management_web_gui_element.ms
+# created from running config
+# microscript to configure Management.web.gui_element values
+# generation device: 00:60:A7:0A:8B:DE
+# generation date  : 2025-07-15 10:16:11
+
+Management.web.gui_element[*].name = 
+
+Management.web.gui_element[*].name = FRM_Headline
+Management.web.gui_element[FRM_Headline].type = FRAME
+Management.web.gui_element[FRM_Headline].page = Home, TestRun, Config
+Management.web.gui_element[FRM_Headline].style_name = 
+Management.web.gui_element[FRM_Headline].visibility = NORMAL
+Management.web.gui_element[FRM_Headline].auto_save = Disabled
+Management.web.gui_element[FRM_Headline].remote_accessible = Disabled
+Management.web.gui_element[FRM_Headline].sensor_attribute = 
+Management.web.gui_element[FRM_Headline].script_name = 
+Management.web.gui_element[FRM_Headline].watched_element = 
+Management.web.gui_element[FRM_Headline].order = 4
+Management.web.gui_element[FRM_Headline].height = 10
+Management.web.gui_element[FRM_Headline].width = 60
+Management.web.gui_element[FRM_Headline].top_margin = 0
+Management.web.gui_element[FRM_Headline].left_margin = 0
+Management.web.gui_element[FRM_Headline].header = 
+Management.web.gui_element[FRM_Headline].text = 
+Management.web.gui_element[FRM_Headline].value = 
+Management.web.gui_element[FRM_Headline].start_value = 
+Management.web.gui_element[FRM_Headline].image = 
+Management.web.gui_element[FRM_Headline].options = bborder=0,cboxpassive=transparent,radius=0,shadow=0
+Management.web.gui_element[*].name = TTL_RoomName
+Management.web.gui_element[TTL_RoomName].type = LABEL
+Management.web.gui_element[TTL_RoomName].page = Home, TestRun, Config
+Management.web.gui_element[TTL_RoomName].style_name = 
+Management.web.gui_element[TTL_RoomName].visibility = NORMAL
+Management.web.gui_element[TTL_RoomName].auto_save = Disabled
+Management.web.gui_element[TTL_RoomName].remote_accessible = Disabled
+Management.web.gui_element[TTL_RoomName].sensor_attribute = 
+Management.web.gui_element[TTL_RoomName].script_name = 
+Management.web.gui_element[TTL_RoomName].watched_element = 
+Management.web.gui_element[TTL_RoomName].order = 14
+Management.web.gui_element[TTL_RoomName].height = 50
+Management.web.gui_element[TTL_RoomName].width = 20
+Management.web.gui_element[TTL_RoomName].top_margin = 0
+Management.web.gui_element[TTL_RoomName].left_margin = 20
+Management.web.gui_element[TTL_RoomName].header = 
+Management.web.gui_element[TTL_RoomName].text = Testbench
+Management.web.gui_element[TTL_RoomName].value = 
+Management.web.gui_element[TTL_RoomName].start_value = 
+Management.web.gui_element[TTL_RoomName].image = 
+Management.web.gui_element[TTL_RoomName].options = frame=FRM_Headline, bborder=0, cboxpassive=transparent, radius=0,textsize=100
+Management.web.gui_element[*].name = BOX_Date
+Management.web.gui_element[BOX_Date].type = TEXT_BOX
+Management.web.gui_element[BOX_Date].page = Home, TestRun, Config
+Management.web.gui_element[BOX_Date].style_name = 
+Management.web.gui_element[BOX_Date].visibility = NORMAL
+Management.web.gui_element[BOX_Date].auto_save = Disabled
+Management.web.gui_element[BOX_Date].remote_accessible = Disabled
+Management.web.gui_element[BOX_Date].sensor_attribute = 
+Management.web.gui_element[BOX_Date].script_name = 
+Management.web.gui_element[BOX_Date].watched_element = Management.NTP.local_date
+Management.web.gui_element[BOX_Date].order = 7
+Management.web.gui_element[BOX_Date].height = 50
+Management.web.gui_element[BOX_Date].width = 100
+Management.web.gui_element[BOX_Date].top_margin = 0
+Management.web.gui_element[BOX_Date].left_margin = 0
+Management.web.gui_element[BOX_Date].header = 
+Management.web.gui_element[BOX_Date].text = 
+Management.web.gui_element[BOX_Date].value = 
+Management.web.gui_element[BOX_Date].start_value = 
+Management.web.gui_element[BOX_Date].image = 
+Management.web.gui_element[BOX_Date].options = frame=FRM_Headline, bborder=0, cboxpassive=transparent, radius=0
+Management.web.gui_element[*].name = BOX_Time
+Management.web.gui_element[BOX_Time].type = TEXT_BOX
+Management.web.gui_element[BOX_Time].page = Home, TestRun, Config
+Management.web.gui_element[BOX_Time].style_name = 
+Management.web.gui_element[BOX_Time].visibility = NORMAL
+Management.web.gui_element[BOX_Time].auto_save = Disabled
+Management.web.gui_element[BOX_Time].remote_accessible = Disabled
+Management.web.gui_element[BOX_Time].sensor_attribute = 
+Management.web.gui_element[BOX_Time].script_name = 
+Management.web.gui_element[BOX_Time].watched_element = Management.NTP.local_time
+Management.web.gui_element[BOX_Time].order = 10
+Management.web.gui_element[BOX_Time].height = 50
+Management.web.gui_element[BOX_Time].width = 50
+Management.web.gui_element[BOX_Time].top_margin = 0
+Management.web.gui_element[BOX_Time].left_margin = 0
+Management.web.gui_element[BOX_Time].header = 
+Management.web.gui_element[BOX_Time].text = 
+Management.web.gui_element[BOX_Time].value = 
+Management.web.gui_element[BOX_Time].start_value = 
+Management.web.gui_element[BOX_Time].image = 
+Management.web.gui_element[BOX_Time].options = frame=FRM_Headline, bborder=0, cboxpassive=transparent, radius=0
+Management.web.gui_element[*].name = IMG_Logo
+Management.web.gui_element[IMG_Logo].type = IMAGE
+Management.web.gui_element[IMG_Logo].page = Home, TestRun, Config
+Management.web.gui_element[IMG_Logo].style_name = 
+Management.web.gui_element[IMG_Logo].visibility = NORMAL
+Management.web.gui_element[IMG_Logo].auto_save = Disabled
+Management.web.gui_element[IMG_Logo].remote_accessible = Disabled
+Management.web.gui_element[IMG_Logo].sensor_attribute = 
+Management.web.gui_element[IMG_Logo].script_name = 
+Management.web.gui_element[IMG_Logo].watched_element = 
+Management.web.gui_element[IMG_Logo].order = 17
+Management.web.gui_element[IMG_Logo].height = 10
+Management.web.gui_element[IMG_Logo].width = 40
+Management.web.gui_element[IMG_Logo].top_margin = 0
+Management.web.gui_element[IMG_Logo].left_margin = 0
+Management.web.gui_element[IMG_Logo].header = 
+Management.web.gui_element[IMG_Logo].text = 
+Management.web.gui_element[IMG_Logo].value = 
+Management.web.gui_element[IMG_Logo].start_value = 
+Management.web.gui_element[IMG_Logo].image = smartdirector/MICROSENS.svg
+Management.web.gui_element[IMG_Logo].options = ealign=right, cboxpassive=transparent, radius=0
+Management.web.gui_element[*].name = BTN_UsePower1
+Management.web.gui_element[BTN_UsePower1].type = BUTTON
+Management.web.gui_element[BTN_UsePower1].page = Home
+Management.web.gui_element[BTN_UsePower1].style_name = BTN_SLD
+Management.web.gui_element[BTN_UsePower1].visibility = NORMAL
+Management.web.gui_element[BTN_UsePower1].auto_save = Disabled
+Management.web.gui_element[BTN_UsePower1].remote_accessible = Disabled
+Management.web.gui_element[BTN_UsePower1].sensor_attribute = POWER
+Management.web.gui_element[BTN_UsePower1].script_name = 
+Management.web.gui_element[BTN_UsePower1].watched_element = 
+Management.web.gui_element[BTN_UsePower1].order = 20
+Management.web.gui_element[BTN_UsePower1].height = 24
+Management.web.gui_element[BTN_UsePower1].width = 100
+Management.web.gui_element[BTN_UsePower1].top_margin = 0
+Management.web.gui_element[BTN_UsePower1].left_margin = 0
+Management.web.gui_element[BTN_UsePower1].header = 
+Management.web.gui_element[BTN_UsePower1].text = Use Power 1
+Management.web.gui_element[BTN_UsePower1].value = 1
+Management.web.gui_element[BTN_UsePower1].start_value = 0
+Management.web.gui_element[BTN_UsePower1].image = 
+Management.web.gui_element[BTN_UsePower1].options = frame=FRM_SceneControl, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = FRM_SceneControl
+Management.web.gui_element[FRM_SceneControl].type = FRAME
+Management.web.gui_element[FRM_SceneControl].page = Home
+Management.web.gui_element[FRM_SceneControl].style_name = 
+Management.web.gui_element[FRM_SceneControl].visibility = NORMAL
+Management.web.gui_element[FRM_SceneControl].auto_save = Disabled
+Management.web.gui_element[FRM_SceneControl].remote_accessible = Disabled
+Management.web.gui_element[FRM_SceneControl].sensor_attribute = 
+Management.web.gui_element[FRM_SceneControl].script_name = 
+Management.web.gui_element[FRM_SceneControl].watched_element = 
+Management.web.gui_element[FRM_SceneControl].order = 19
+Management.web.gui_element[FRM_SceneControl].height = 75
+Management.web.gui_element[FRM_SceneControl].width = 50
+Management.web.gui_element[FRM_SceneControl].top_margin = 0
+Management.web.gui_element[FRM_SceneControl].left_margin = 0
+Management.web.gui_element[FRM_SceneControl].header = 
+Management.web.gui_element[FRM_SceneControl].text = 
+Management.web.gui_element[FRM_SceneControl].value = 
+Management.web.gui_element[FRM_SceneControl].start_value = 
+Management.web.gui_element[FRM_SceneControl].image = 
+Management.web.gui_element[FRM_SceneControl].options = bborder=0,  cboxpassive=transparent, cbackground=transparent, radius=0,shadow=0
+Management.web.gui_element[*].name = LNE_SceneControl
+Management.web.gui_element[LNE_SceneControl].type = LABEL
+Management.web.gui_element[LNE_SceneControl].page = Home
+Management.web.gui_element[LNE_SceneControl].style_name = 
+Management.web.gui_element[LNE_SceneControl].visibility = NORMAL
+Management.web.gui_element[LNE_SceneControl].auto_save = Disabled
+Management.web.gui_element[LNE_SceneControl].remote_accessible = Disabled
+Management.web.gui_element[LNE_SceneControl].sensor_attribute = 
+Management.web.gui_element[LNE_SceneControl].script_name = 
+Management.web.gui_element[LNE_SceneControl].watched_element = 
+Management.web.gui_element[LNE_SceneControl].order = 800
+Management.web.gui_element[LNE_SceneControl].height = 1
+Management.web.gui_element[LNE_SceneControl].width = 100
+Management.web.gui_element[LNE_SceneControl].top_margin = 0
+Management.web.gui_element[LNE_SceneControl].left_margin = 0
+Management.web.gui_element[LNE_SceneControl].header = 
+Management.web.gui_element[LNE_SceneControl].text = 
+Management.web.gui_element[LNE_SceneControl].value = 
+Management.web.gui_element[LNE_SceneControl].start_value = 
+Management.web.gui_element[LNE_SceneControl].image = 
+Management.web.gui_element[LNE_SceneControl].options = bborder=0, radius=0
+Management.web.gui_element[*].name = BTN_UsePower2
+Management.web.gui_element[BTN_UsePower2].type = BUTTON
+Management.web.gui_element[BTN_UsePower2].page = Home
+Management.web.gui_element[BTN_UsePower2].style_name = BTN_SLD
+Management.web.gui_element[BTN_UsePower2].visibility = NORMAL
+Management.web.gui_element[BTN_UsePower2].auto_save = Disabled
+Management.web.gui_element[BTN_UsePower2].remote_accessible = Disabled
+Management.web.gui_element[BTN_UsePower2].sensor_attribute = POWER
+Management.web.gui_element[BTN_UsePower2].script_name = 
+Management.web.gui_element[BTN_UsePower2].watched_element = 
+Management.web.gui_element[BTN_UsePower2].order = 21
+Management.web.gui_element[BTN_UsePower2].height = 24
+Management.web.gui_element[BTN_UsePower2].width = 100
+Management.web.gui_element[BTN_UsePower2].top_margin = 0
+Management.web.gui_element[BTN_UsePower2].left_margin = 0
+Management.web.gui_element[BTN_UsePower2].header = 
+Management.web.gui_element[BTN_UsePower2].text = Use Power 2
+Management.web.gui_element[BTN_UsePower2].value = 1
+Management.web.gui_element[BTN_UsePower2].start_value = 0
+Management.web.gui_element[BTN_UsePower2].image = 
+Management.web.gui_element[BTN_UsePower2].options = frame=FRM_SceneControl, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = FRM_SceneControl_2
+Management.web.gui_element[FRM_SceneControl_2].type = FRAME
+Management.web.gui_element[FRM_SceneControl_2].page = Home
+Management.web.gui_element[FRM_SceneControl_2].style_name = 
+Management.web.gui_element[FRM_SceneControl_2].visibility = NORMAL
+Management.web.gui_element[FRM_SceneControl_2].auto_save = Disabled
+Management.web.gui_element[FRM_SceneControl_2].remote_accessible = Disabled
+Management.web.gui_element[FRM_SceneControl_2].sensor_attribute = 
+Management.web.gui_element[FRM_SceneControl_2].script_name = 
+Management.web.gui_element[FRM_SceneControl_2].watched_element = 
+Management.web.gui_element[FRM_SceneControl_2].order = 20
+Management.web.gui_element[FRM_SceneControl_2].height = 75
+Management.web.gui_element[FRM_SceneControl_2].width = 50
+Management.web.gui_element[FRM_SceneControl_2].top_margin = 0
+Management.web.gui_element[FRM_SceneControl_2].left_margin = 0
+Management.web.gui_element[FRM_SceneControl_2].header = 
+Management.web.gui_element[FRM_SceneControl_2].text = 
+Management.web.gui_element[FRM_SceneControl_2].value = 
+Management.web.gui_element[FRM_SceneControl_2].start_value = 
+Management.web.gui_element[FRM_SceneControl_2].image = 
+Management.web.gui_element[FRM_SceneControl_2].options = bborder=0,  cboxpassive=transparent, cbackground=transparent, radius=0,shadow=0
+Management.web.gui_element[*].name = BTN_UsePower3
+Management.web.gui_element[BTN_UsePower3].type = BUTTON
+Management.web.gui_element[BTN_UsePower3].page = Home
+Management.web.gui_element[BTN_UsePower3].style_name = BTN_SLD
+Management.web.gui_element[BTN_UsePower3].visibility = NORMAL
+Management.web.gui_element[BTN_UsePower3].auto_save = Disabled
+Management.web.gui_element[BTN_UsePower3].remote_accessible = Disabled
+Management.web.gui_element[BTN_UsePower3].sensor_attribute = POWER
+Management.web.gui_element[BTN_UsePower3].script_name = 
+Management.web.gui_element[BTN_UsePower3].watched_element = 
+Management.web.gui_element[BTN_UsePower3].order = 22
+Management.web.gui_element[BTN_UsePower3].height = 24
+Management.web.gui_element[BTN_UsePower3].width = 100
+Management.web.gui_element[BTN_UsePower3].top_margin = 0
+Management.web.gui_element[BTN_UsePower3].left_margin = 0
+Management.web.gui_element[BTN_UsePower3].header = 
+Management.web.gui_element[BTN_UsePower3].text = Use Power 3
+Management.web.gui_element[BTN_UsePower3].value = 1
+Management.web.gui_element[BTN_UsePower3].start_value = 0
+Management.web.gui_element[BTN_UsePower3].image = 
+Management.web.gui_element[BTN_UsePower3].options = frame=FRM_SceneControl, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = TopicButtons
+Management.web.gui_element[TopicButtons].type = HYPER_LINK
+Management.web.gui_element[TopicButtons].page = Home, TestRun, Config
+Management.web.gui_element[TopicButtons].style_name = 
+Management.web.gui_element[TopicButtons].visibility = NORMAL
+Management.web.gui_element[TopicButtons].auto_save = Disabled
+Management.web.gui_element[TopicButtons].remote_accessible = Disabled
+Management.web.gui_element[TopicButtons].sensor_attribute = BUTTON
+Management.web.gui_element[TopicButtons].script_name = 
+Management.web.gui_element[TopicButtons].watched_element = 
+Management.web.gui_element[TopicButtons].order = 1000
+Management.web.gui_element[TopicButtons].height = 14
+Management.web.gui_element[TopicButtons].width = 100
+Management.web.gui_element[TopicButtons].top_margin = 0
+Management.web.gui_element[TopicButtons].left_margin = 0
+Management.web.gui_element[TopicButtons].header = 
+Management.web.gui_element[TopicButtons].text = Home, Run, Config
+Management.web.gui_element[TopicButtons].value = Home, TestRun, Config
+Management.web.gui_element[TopicButtons].start_value = 
+Management.web.gui_element[TopicButtons].image = 
+Management.web.gui_element[TopicButtons].options = cboxpassive=transparent,cunselected=#717056f4
+Management.web.gui_element[*].name = BTN_UsePower4
+Management.web.gui_element[BTN_UsePower4].type = BUTTON
+Management.web.gui_element[BTN_UsePower4].page = Home
+Management.web.gui_element[BTN_UsePower4].style_name = BTN_SLD
+Management.web.gui_element[BTN_UsePower4].visibility = NORMAL
+Management.web.gui_element[BTN_UsePower4].auto_save = Disabled
+Management.web.gui_element[BTN_UsePower4].remote_accessible = Disabled
+Management.web.gui_element[BTN_UsePower4].sensor_attribute = POWER
+Management.web.gui_element[BTN_UsePower4].script_name = 
+Management.web.gui_element[BTN_UsePower4].watched_element = 
+Management.web.gui_element[BTN_UsePower4].order = 23
+Management.web.gui_element[BTN_UsePower4].height = 24
+Management.web.gui_element[BTN_UsePower4].width = 100
+Management.web.gui_element[BTN_UsePower4].top_margin = 0
+Management.web.gui_element[BTN_UsePower4].left_margin = 0
+Management.web.gui_element[BTN_UsePower4].header = 
+Management.web.gui_element[BTN_UsePower4].text = Use Power 4
+Management.web.gui_element[BTN_UsePower4].value = 1
+Management.web.gui_element[BTN_UsePower4].start_value = 0
+Management.web.gui_element[BTN_UsePower4].image = 
+Management.web.gui_element[BTN_UsePower4].options = frame=FRM_SceneControl, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = SLD_Power_1
+Management.web.gui_element[SLD_Power_1].type = SLIDER
+Management.web.gui_element[SLD_Power_1].page = Home
+Management.web.gui_element[SLD_Power_1].style_name = BTN_SLD
+Management.web.gui_element[SLD_Power_1].visibility = NORMAL
+Management.web.gui_element[SLD_Power_1].auto_save = Disabled
+Management.web.gui_element[SLD_Power_1].remote_accessible = Disabled
+Management.web.gui_element[SLD_Power_1].sensor_attribute = SLIDER
+Management.web.gui_element[SLD_Power_1].script_name = 
+Management.web.gui_element[SLD_Power_1].watched_element = 
+Management.web.gui_element[SLD_Power_1].order = 20
+Management.web.gui_element[SLD_Power_1].height = 24
+Management.web.gui_element[SLD_Power_1].width = 100
+Management.web.gui_element[SLD_Power_1].top_margin = 0
+Management.web.gui_element[SLD_Power_1].left_margin = 0
+Management.web.gui_element[SLD_Power_1].header = Slider Power 1
+Management.web.gui_element[SLD_Power_1].text = 
+Management.web.gui_element[SLD_Power_1].value = 3000,50000
+Management.web.gui_element[SLD_Power_1].start_value = 3000
+Management.web.gui_element[SLD_Power_1].image = 
+Management.web.gui_element[SLD_Power_1].options = frame=FRM_SceneControl_2, barwidth=65, bborder=0, bsteps=470
+Management.web.gui_element[*].name = SLD_Power_2
+Management.web.gui_element[SLD_Power_2].type = SLIDER
+Management.web.gui_element[SLD_Power_2].page = Home
+Management.web.gui_element[SLD_Power_2].style_name = BTN_SLD
+Management.web.gui_element[SLD_Power_2].visibility = NORMAL
+Management.web.gui_element[SLD_Power_2].auto_save = Disabled
+Management.web.gui_element[SLD_Power_2].remote_accessible = Disabled
+Management.web.gui_element[SLD_Power_2].sensor_attribute = SLIDER
+Management.web.gui_element[SLD_Power_2].script_name = 
+Management.web.gui_element[SLD_Power_2].watched_element = 
+Management.web.gui_element[SLD_Power_2].order = 21
+Management.web.gui_element[SLD_Power_2].height = 24
+Management.web.gui_element[SLD_Power_2].width = 100
+Management.web.gui_element[SLD_Power_2].top_margin = 0
+Management.web.gui_element[SLD_Power_2].left_margin = 0
+Management.web.gui_element[SLD_Power_2].header = Slider Power 2
+Management.web.gui_element[SLD_Power_2].text = 
+Management.web.gui_element[SLD_Power_2].value = 3000,50000
+Management.web.gui_element[SLD_Power_2].start_value = 15000
+Management.web.gui_element[SLD_Power_2].image = 
+Management.web.gui_element[SLD_Power_2].options = frame=FRM_SceneControl_2, barwidth=65, bborder=0, bsteps=470
+Management.web.gui_element[*].name = SLD_Power_3
+Management.web.gui_element[SLD_Power_3].type = SLIDER
+Management.web.gui_element[SLD_Power_3].page = Home
+Management.web.gui_element[SLD_Power_3].style_name = BTN_SLD
+Management.web.gui_element[SLD_Power_3].visibility = NORMAL
+Management.web.gui_element[SLD_Power_3].auto_save = Disabled
+Management.web.gui_element[SLD_Power_3].remote_accessible = Disabled
+Management.web.gui_element[SLD_Power_3].sensor_attribute = SLIDER
+Management.web.gui_element[SLD_Power_3].script_name = 
+Management.web.gui_element[SLD_Power_3].watched_element = 
+Management.web.gui_element[SLD_Power_3].order = 22
+Management.web.gui_element[SLD_Power_3].height = 24
+Management.web.gui_element[SLD_Power_3].width = 100
+Management.web.gui_element[SLD_Power_3].top_margin = 0
+Management.web.gui_element[SLD_Power_3].left_margin = 0
+Management.web.gui_element[SLD_Power_3].header = Slider Power 3
+Management.web.gui_element[SLD_Power_3].text = 
+Management.web.gui_element[SLD_Power_3].value = 3000,50000
+Management.web.gui_element[SLD_Power_3].start_value = 25000
+Management.web.gui_element[SLD_Power_3].image = 
+Management.web.gui_element[SLD_Power_3].options = frame=FRM_SceneControl_2, barwidth=65, bborder=0, bsteps=470
+Management.web.gui_element[*].name = SLD_Power_4
+Management.web.gui_element[SLD_Power_4].type = SLIDER
+Management.web.gui_element[SLD_Power_4].page = Home
+Management.web.gui_element[SLD_Power_4].style_name = BTN_SLD
+Management.web.gui_element[SLD_Power_4].visibility = NORMAL
+Management.web.gui_element[SLD_Power_4].auto_save = Disabled
+Management.web.gui_element[SLD_Power_4].remote_accessible = Disabled
+Management.web.gui_element[SLD_Power_4].sensor_attribute = SLIDER
+Management.web.gui_element[SLD_Power_4].script_name = 
+Management.web.gui_element[SLD_Power_4].watched_element = 
+Management.web.gui_element[SLD_Power_4].order = 23
+Management.web.gui_element[SLD_Power_4].height = 24
+Management.web.gui_element[SLD_Power_4].width = 100
+Management.web.gui_element[SLD_Power_4].top_margin = 0
+Management.web.gui_element[SLD_Power_4].left_margin = 0
+Management.web.gui_element[SLD_Power_4].header = Slider Power 4
+Management.web.gui_element[SLD_Power_4].text = 
+Management.web.gui_element[SLD_Power_4].value = 3000,50000
+Management.web.gui_element[SLD_Power_4].start_value = 50000
+Management.web.gui_element[SLD_Power_4].image = 
+Management.web.gui_element[SLD_Power_4].options = frame=FRM_SceneControl_2, barwidth=65, bborder=0, bsteps=470
+Management.web.gui_element[*].name = FRM_TestRun_1
+Management.web.gui_element[FRM_TestRun_1].type = FRAME
+Management.web.gui_element[FRM_TestRun_1].page = TestRun
+Management.web.gui_element[FRM_TestRun_1].style_name = 
+Management.web.gui_element[FRM_TestRun_1].visibility = NORMAL
+Management.web.gui_element[FRM_TestRun_1].auto_save = Disabled
+Management.web.gui_element[FRM_TestRun_1].remote_accessible = Disabled
+Management.web.gui_element[FRM_TestRun_1].sensor_attribute = 
+Management.web.gui_element[FRM_TestRun_1].script_name = 
+Management.web.gui_element[FRM_TestRun_1].watched_element = 
+Management.web.gui_element[FRM_TestRun_1].order = 19
+Management.web.gui_element[FRM_TestRun_1].height = 75
+Management.web.gui_element[FRM_TestRun_1].width = 50
+Management.web.gui_element[FRM_TestRun_1].top_margin = 0
+Management.web.gui_element[FRM_TestRun_1].left_margin = 0
+Management.web.gui_element[FRM_TestRun_1].header = 
+Management.web.gui_element[FRM_TestRun_1].text = 
+Management.web.gui_element[FRM_TestRun_1].value = 
+Management.web.gui_element[FRM_TestRun_1].start_value = 
+Management.web.gui_element[FRM_TestRun_1].image = 
+Management.web.gui_element[FRM_TestRun_1].options = bborder=0,  cboxpassive=transparent, cbackground=transparent, radius=0,shadow=0
+Management.web.gui_element[*].name = FRM_TestRun_2
+Management.web.gui_element[FRM_TestRun_2].type = FRAME
+Management.web.gui_element[FRM_TestRun_2].page = TestRun
+Management.web.gui_element[FRM_TestRun_2].style_name = 
+Management.web.gui_element[FRM_TestRun_2].visibility = NORMAL
+Management.web.gui_element[FRM_TestRun_2].auto_save = Disabled
+Management.web.gui_element[FRM_TestRun_2].remote_accessible = Disabled
+Management.web.gui_element[FRM_TestRun_2].sensor_attribute = 
+Management.web.gui_element[FRM_TestRun_2].script_name = 
+Management.web.gui_element[FRM_TestRun_2].watched_element = 
+Management.web.gui_element[FRM_TestRun_2].order = 20
+Management.web.gui_element[FRM_TestRun_2].height = 75
+Management.web.gui_element[FRM_TestRun_2].width = 50
+Management.web.gui_element[FRM_TestRun_2].top_margin = 0
+Management.web.gui_element[FRM_TestRun_2].left_margin = 0
+Management.web.gui_element[FRM_TestRun_2].header = 
+Management.web.gui_element[FRM_TestRun_2].text = 
+Management.web.gui_element[FRM_TestRun_2].value = 
+Management.web.gui_element[FRM_TestRun_2].start_value = 
+Management.web.gui_element[FRM_TestRun_2].image = 
+Management.web.gui_element[FRM_TestRun_2].options = bborder=0,  cboxpassive=transparent, cbackground=transparent, radius=0,shadow=0
+Management.web.gui_element[*].name = BTN_Calibrate
+Management.web.gui_element[BTN_Calibrate].type = BUTTON
+Management.web.gui_element[BTN_Calibrate].page = TestRun
+Management.web.gui_element[BTN_Calibrate].style_name = BTN_SLD
+Management.web.gui_element[BTN_Calibrate].visibility = NORMAL
+Management.web.gui_element[BTN_Calibrate].auto_save = Disabled
+Management.web.gui_element[BTN_Calibrate].remote_accessible = Disabled
+Management.web.gui_element[BTN_Calibrate].sensor_attribute = BUTTON
+Management.web.gui_element[BTN_Calibrate].script_name = 
+Management.web.gui_element[BTN_Calibrate].watched_element = 
+Management.web.gui_element[BTN_Calibrate].order = 20
+Management.web.gui_element[BTN_Calibrate].height = 24
+Management.web.gui_element[BTN_Calibrate].width = 100
+Management.web.gui_element[BTN_Calibrate].top_margin = 0
+Management.web.gui_element[BTN_Calibrate].left_margin = 0
+Management.web.gui_element[BTN_Calibrate].header = 
+Management.web.gui_element[BTN_Calibrate].text = calibrate
+Management.web.gui_element[BTN_Calibrate].value = 1
+Management.web.gui_element[BTN_Calibrate].start_value = 0
+Management.web.gui_element[BTN_Calibrate].image = 
+Management.web.gui_element[BTN_Calibrate].options = frame=FRM_TestRun_1, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = BTN_Start
+Management.web.gui_element[BTN_Start].type = BUTTON
+Management.web.gui_element[BTN_Start].page = TestRun
+Management.web.gui_element[BTN_Start].style_name = BTN_SLD
+Management.web.gui_element[BTN_Start].visibility = NORMAL
+Management.web.gui_element[BTN_Start].auto_save = Disabled
+Management.web.gui_element[BTN_Start].remote_accessible = Disabled
+Management.web.gui_element[BTN_Start].sensor_attribute = BUTTON
+Management.web.gui_element[BTN_Start].script_name = 
+Management.web.gui_element[BTN_Start].watched_element = 
+Management.web.gui_element[BTN_Start].order = 21
+Management.web.gui_element[BTN_Start].height = 24
+Management.web.gui_element[BTN_Start].width = 100
+Management.web.gui_element[BTN_Start].top_margin = 0
+Management.web.gui_element[BTN_Start].left_margin = 0
+Management.web.gui_element[BTN_Start].header = 
+Management.web.gui_element[BTN_Start].text = start
+Management.web.gui_element[BTN_Start].value = 1
+Management.web.gui_element[BTN_Start].start_value = 0
+Management.web.gui_element[BTN_Start].image = 
+Management.web.gui_element[BTN_Start].options = frame=FRM_TestRun_1, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = BTN_Stop
+Management.web.gui_element[BTN_Stop].type = BUTTON
+Management.web.gui_element[BTN_Stop].page = TestRun
+Management.web.gui_element[BTN_Stop].style_name = BTN_SLD
+Management.web.gui_element[BTN_Stop].visibility = NORMAL
+Management.web.gui_element[BTN_Stop].auto_save = Disabled
+Management.web.gui_element[BTN_Stop].remote_accessible = Disabled
+Management.web.gui_element[BTN_Stop].sensor_attribute = BUTTON
+Management.web.gui_element[BTN_Stop].script_name = 
+Management.web.gui_element[BTN_Stop].watched_element = 
+Management.web.gui_element[BTN_Stop].order = 22
+Management.web.gui_element[BTN_Stop].height = 24
+Management.web.gui_element[BTN_Stop].width = 100
+Management.web.gui_element[BTN_Stop].top_margin = 0
+Management.web.gui_element[BTN_Stop].left_margin = 0
+Management.web.gui_element[BTN_Stop].header = 
+Management.web.gui_element[BTN_Stop].text = stop
+Management.web.gui_element[BTN_Stop].value = 1
+Management.web.gui_element[BTN_Stop].start_value = 0
+Management.web.gui_element[BTN_Stop].image = 
+Management.web.gui_element[BTN_Stop].options = frame=FRM_TestRun_1, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = TXT_Describtion
+Management.web.gui_element[TXT_Describtion].type = TEXT_BOX
+Management.web.gui_element[TXT_Describtion].page = TestRun
+Management.web.gui_element[TXT_Describtion].style_name = Textbox
+Management.web.gui_element[TXT_Describtion].visibility = NORMAL
+Management.web.gui_element[TXT_Describtion].auto_save = Disabled
+Management.web.gui_element[TXT_Describtion].remote_accessible = Disabled
+Management.web.gui_element[TXT_Describtion].sensor_attribute = TEXT
+Management.web.gui_element[TXT_Describtion].script_name = 
+Management.web.gui_element[TXT_Describtion].watched_element = $P_Step
+Management.web.gui_element[TXT_Describtion].order = 20
+Management.web.gui_element[TXT_Describtion].height = 32
+Management.web.gui_element[TXT_Describtion].width = 100
+Management.web.gui_element[TXT_Describtion].top_margin = 0
+Management.web.gui_element[TXT_Describtion].left_margin = 0
+Management.web.gui_element[TXT_Describtion].header = Description
+Management.web.gui_element[TXT_Describtion].text = 
+Management.web.gui_element[TXT_Describtion].value = What is happening
+Management.web.gui_element[TXT_Describtion].start_value = 
+Management.web.gui_element[TXT_Describtion].image = 
+Management.web.gui_element[TXT_Describtion].options = frame=FRM_TestRun_2, cboxpassive=transparent,clabeltext=#C0C0C0,rows=2\4
+Management.web.gui_element[*].name = TXT_Message
+Management.web.gui_element[TXT_Message].type = TEXT_BOX
+Management.web.gui_element[TXT_Message].page = TestRun
+Management.web.gui_element[TXT_Message].style_name = Textbox
+Management.web.gui_element[TXT_Message].visibility = NORMAL
+Management.web.gui_element[TXT_Message].auto_save = Disabled
+Management.web.gui_element[TXT_Message].remote_accessible = Disabled
+Management.web.gui_element[TXT_Message].sensor_attribute = TEXT
+Management.web.gui_element[TXT_Message].script_name = 
+Management.web.gui_element[TXT_Message].watched_element = $P_Message
+Management.web.gui_element[TXT_Message].order = 21
+Management.web.gui_element[TXT_Message].height = 32
+Management.web.gui_element[TXT_Message].width = 100
+Management.web.gui_element[TXT_Message].top_margin = 0
+Management.web.gui_element[TXT_Message].left_margin = 0
+Management.web.gui_element[TXT_Message].header = Message
+Management.web.gui_element[TXT_Message].text = 
+Management.web.gui_element[TXT_Message].value = Warning Error Info
+Management.web.gui_element[TXT_Message].start_value = 
+Management.web.gui_element[TXT_Message].image = 
+Management.web.gui_element[TXT_Message].options = frame=FRM_TestRun_2, cboxpassive=transparent,clabeltext=#C0C0C0,rows=2\4
+Management.web.gui_element[*].name = TXT_Progress
+Management.web.gui_element[TXT_Progress].type = TEXT_BOX
+Management.web.gui_element[TXT_Progress].page = TestRun
+Management.web.gui_element[TXT_Progress].style_name = Textbox
+Management.web.gui_element[TXT_Progress].visibility = NORMAL
+Management.web.gui_element[TXT_Progress].auto_save = Disabled
+Management.web.gui_element[TXT_Progress].remote_accessible = Disabled
+Management.web.gui_element[TXT_Progress].sensor_attribute = TEXT
+Management.web.gui_element[TXT_Progress].script_name = 
+Management.web.gui_element[TXT_Progress].watched_element = $P_Progress
+Management.web.gui_element[TXT_Progress].order = 22
+Management.web.gui_element[TXT_Progress].height = 32
+Management.web.gui_element[TXT_Progress].width = 100
+Management.web.gui_element[TXT_Progress].top_margin = 0
+Management.web.gui_element[TXT_Progress].left_margin = 0
+Management.web.gui_element[TXT_Progress].header = Progress
+Management.web.gui_element[TXT_Progress].text = 
+Management.web.gui_element[TXT_Progress].value = 0..100%
+Management.web.gui_element[TXT_Progress].start_value = 
+Management.web.gui_element[TXT_Progress].image = 
+Management.web.gui_element[TXT_Progress].options = frame=FRM_TestRun_2, cboxpassive=transparent,clabeltext=#C0C0C0,rows=2\4
+Management.web.gui_element[*].name = FRM_Config
+Management.web.gui_element[FRM_Config].type = FRAME
+Management.web.gui_element[FRM_Config].page = Config
+Management.web.gui_element[FRM_Config].style_name = 
+Management.web.gui_element[FRM_Config].visibility = NORMAL
+Management.web.gui_element[FRM_Config].auto_save = Disabled
+Management.web.gui_element[FRM_Config].remote_accessible = Disabled
+Management.web.gui_element[FRM_Config].sensor_attribute = 
+Management.web.gui_element[FRM_Config].script_name = 
+Management.web.gui_element[FRM_Config].watched_element = 
+Management.web.gui_element[FRM_Config].order = 19
+Management.web.gui_element[FRM_Config].height = 75
+Management.web.gui_element[FRM_Config].width = 100
+Management.web.gui_element[FRM_Config].top_margin = 0
+Management.web.gui_element[FRM_Config].left_margin = 0
+Management.web.gui_element[FRM_Config].header = 
+Management.web.gui_element[FRM_Config].text = 
+Management.web.gui_element[FRM_Config].value = 
+Management.web.gui_element[FRM_Config].start_value = 
+Management.web.gui_element[FRM_Config].image = 
+Management.web.gui_element[FRM_Config].options = bborder=0,  cboxpassive=transparent, cbackground=transparent, radius=0,shadow=0
+Management.web.gui_element[*].name = BTN_Reset
+Management.web.gui_element[BTN_Reset].type = BUTTON
+Management.web.gui_element[BTN_Reset].page = Config
+Management.web.gui_element[BTN_Reset].style_name = BTN_SLD
+Management.web.gui_element[BTN_Reset].visibility = NORMAL
+Management.web.gui_element[BTN_Reset].auto_save = Disabled
+Management.web.gui_element[BTN_Reset].remote_accessible = Disabled
+Management.web.gui_element[BTN_Reset].sensor_attribute = BUTTON
+Management.web.gui_element[BTN_Reset].script_name = 
+Management.web.gui_element[BTN_Reset].watched_element = 
+Management.web.gui_element[BTN_Reset].order = 20
+Management.web.gui_element[BTN_Reset].height = 32
+Management.web.gui_element[BTN_Reset].width = 50
+Management.web.gui_element[BTN_Reset].top_margin = 0
+Management.web.gui_element[BTN_Reset].left_margin = 0
+Management.web.gui_element[BTN_Reset].header = 
+Management.web.gui_element[BTN_Reset].text = reset
+Management.web.gui_element[BTN_Reset].value = 1
+Management.web.gui_element[BTN_Reset].start_value = 0
+Management.web.gui_element[BTN_Reset].image = 
+Management.web.gui_element[BTN_Reset].options = frame=FRM_Config, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = TGL_VG_Box
+Management.web.gui_element[TGL_VG_Box].type = TOGGLE
+Management.web.gui_element[TGL_VG_Box].page = TestRun
+Management.web.gui_element[TGL_VG_Box].style_name = BTN_SLD
+Management.web.gui_element[TGL_VG_Box].visibility = NORMAL
+Management.web.gui_element[TGL_VG_Box].auto_save = Disabled
+Management.web.gui_element[TGL_VG_Box].remote_accessible = Disabled
+Management.web.gui_element[TGL_VG_Box].sensor_attribute = BUTTON
+Management.web.gui_element[TGL_VG_Box].script_name = 
+Management.web.gui_element[TGL_VG_Box].watched_element = 
+Management.web.gui_element[TGL_VG_Box].order = 23
+Management.web.gui_element[TGL_VG_Box].height = 24
+Management.web.gui_element[TGL_VG_Box].width = 100
+Management.web.gui_element[TGL_VG_Box].top_margin = 0
+Management.web.gui_element[TGL_VG_Box].left_margin = 0
+Management.web.gui_element[TGL_VG_Box].header = 
+Management.web.gui_element[TGL_VG_Box].text = SLC,VG-Box
+Management.web.gui_element[TGL_VG_Box].value = 0,1
+Management.web.gui_element[TGL_VG_Box].start_value = 0
+Management.web.gui_element[TGL_VG_Box].image = 
+Management.web.gui_element[TGL_VG_Box].options = frame=FRM_TestRun_1, bborder=0, cboxpassive=transparent, radius=2
+Management.web.gui_element[*].name = SLD_VG_BOX
+Management.web.gui_element[SLD_VG_BOX].type = SLIDER
+Management.web.gui_element[SLD_VG_BOX].page = Config
+Management.web.gui_element[SLD_VG_BOX].style_name = BTN_SLD
+Management.web.gui_element[SLD_VG_BOX].visibility = NORMAL
+Management.web.gui_element[SLD_VG_BOX].auto_save = Disabled
+Management.web.gui_element[SLD_VG_BOX].remote_accessible = Disabled
+Management.web.gui_element[SLD_VG_BOX].sensor_attribute = SLIDER
+Management.web.gui_element[SLD_VG_BOX].script_name = 
+Management.web.gui_element[SLD_VG_BOX].watched_element = 
+Management.web.gui_element[SLD_VG_BOX].order = 21
+Management.web.gui_element[SLD_VG_BOX].height = 32
+Management.web.gui_element[SLD_VG_BOX].width = 100
+Management.web.gui_element[SLD_VG_BOX].top_margin = 0
+Management.web.gui_element[SLD_VG_BOX].left_margin = 0
+Management.web.gui_element[SLD_VG_BOX].header = Slider Power VG Box
+Management.web.gui_element[SLD_VG_BOX].text = 
+Management.web.gui_element[SLD_VG_BOX].value = 3000,50000
+Management.web.gui_element[SLD_VG_BOX].start_value = 15000
+Management.web.gui_element[SLD_VG_BOX].image = 
+Management.web.gui_element[SLD_VG_BOX].options = frame=FRM_Config, barwidth=65, bborder=0, bsteps=470
+
+# set_running_management_web_gui_style.ms
+# created from running config
+# microscript to configure Management.web.gui_style values
+# generation device: 00:60:A7:0A:8B:DE
+# generation date  : 2025-07-15 10:16:22
+
+Management.web.gui_style[*].name = 
+
+Management.web.gui_style[*].name = SmartOffice
+Management.web.gui_style[SmartOffice].background_color = #ffffff
+Management.web.gui_style[SmartOffice].box_passive_color = #696969
+Management.web.gui_style[SmartOffice].box_active_color = #ff0000
+Management.web.gui_style[SmartOffice].selected_color = #56715cf4
+Management.web.gui_style[SmartOffice].unselected_color = #566571f4
+Management.web.gui_style[SmartOffice].selected_text_color = #F0F0F0
+Management.web.gui_style[SmartOffice].unselected_text_color = #F0F0F0
+Management.web.gui_style[SmartOffice].content_text_color = #F0F0F0
+Management.web.gui_style[SmartOffice].header_text_color = #f00000
+Management.web.gui_style[SmartOffice].accent_color = #ff8022
+Management.web.gui_style[SmartOffice].gradient = 0
+Management.web.gui_style[SmartOffice].shadow = 0
+Management.web.gui_style[SmartOffice].radius = 1
+Management.web.gui_style[SmartOffice].background_image = DarkNetwork1.jpg
+Management.web.gui_style[SmartOffice].font = 
+Management.web.gui_style[*].name = BTN_SLD
+Management.web.gui_style[BTN_SLD].background_color = #ffffff
+Management.web.gui_style[BTN_SLD].box_passive_color = #696969
+Management.web.gui_style[BTN_SLD].box_active_color = #505050
+Management.web.gui_style[BTN_SLD].selected_color = #56715cf4
+Management.web.gui_style[BTN_SLD].unselected_color = #566571f4
+Management.web.gui_style[BTN_SLD].selected_text_color = #F0F0F0
+Management.web.gui_style[BTN_SLD].unselected_text_color = #F0F0F0
+Management.web.gui_style[BTN_SLD].content_text_color = #F0F0F0
+Management.web.gui_style[BTN_SLD].header_text_color = #f00000
+Management.web.gui_style[BTN_SLD].accent_color = #ff8022
+Management.web.gui_style[BTN_SLD].gradient = 0
+Management.web.gui_style[BTN_SLD].shadow = 0
+Management.web.gui_style[BTN_SLD].radius = 1
+Management.web.gui_style[BTN_SLD].background_image = 
+Management.web.gui_style[BTN_SLD].font = 
+Management.web.gui_style[*].name = Textbox
+Management.web.gui_style[Textbox].background_color = #303030
+Management.web.gui_style[Textbox].box_passive_color = #303030
+Management.web.gui_style[Textbox].box_active_color = #505050
+Management.web.gui_style[Textbox].selected_color = #606060
+Management.web.gui_style[Textbox].unselected_color = #404040
+Management.web.gui_style[Textbox].selected_text_color = #F0F0F0
+Management.web.gui_style[Textbox].unselected_text_color = #E0E0E0
+Management.web.gui_style[Textbox].content_text_color = #F0F0F0
+Management.web.gui_style[Textbox].header_text_color = #9E9E9E
+Management.web.gui_style[Textbox].accent_color = #FF800
+Management.web.gui_style[Textbox].gradient = 10
+Management.web.gui_style[Textbox].shadow = 5
+Management.web.gui_style[Textbox].radius = 3
+Management.web.gui_style[Textbox].background_image = 
+Management.web.gui_style[Textbox].font = 
+
+# set_running_management_files_server.ms
+# created from running config
+# microscript to configure Management.files.server values
+# generation device: 00:60:A7:0A:8B:DE
+# generation date  : 2025-07-15 10:31:21
+Management.files.server.enable_tftp = Disabled
+Management.files.server.enable_ftp = Enabled
+Management.files.server.enable_sftp = Disabled
+Management.files.server.enable_api = Disabled
+Management.files.server.enable_rest = Disabled
+Management.files.server.enable_json_rpc = Disabled
+
+# set_running_device_controller_smart_digital_io_config.ms
+# created from running config
+# microscript to configure Device.controller.smart_digital_io_config values
+# generation device: 00:60:A7:0A:8B:DE
+# generation date  : 2025-07-15 10:38:10
+
+Device.controller.smart_digital_io_config[*].name =
+
+Device.controller.smart_digital_io_config[*].name = SIOD1
+Device.controller.smart_digital_io_config[SIOD1].din1_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din1_attribute = DIN:1
+Device.controller.smart_digital_io_config[SIOD1].din1_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din1_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din2_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din2_attribute = DIN:2
+Device.controller.smart_digital_io_config[SIOD1].din2_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din2_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din3_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din3_attribute = DIN:3
+Device.controller.smart_digital_io_config[SIOD1].din3_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din3_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din4_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din4_attribute = DIN:4
+Device.controller.smart_digital_io_config[SIOD1].din4_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din4_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din5_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din5_attribute = DIN:5
+Device.controller.smart_digital_io_config[SIOD1].din5_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din5_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din6_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din6_attribute = DIN:6
+Device.controller.smart_digital_io_config[SIOD1].din6_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din6_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din7_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din7_attribute = DIN:7
+Device.controller.smart_digital_io_config[SIOD1].din7_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din7_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din8_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din8_attribute = DIN:8
+Device.controller.smart_digital_io_config[SIOD1].din8_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din8_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din9_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din9_attribute = DIN:9
+Device.controller.smart_digital_io_config[SIOD1].din9_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din9_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].din10_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].din10_attribute = DIN:10
+Device.controller.smart_digital_io_config[SIOD1].din10_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].din10_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD1].dout1_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].dout1_attribute = DOUT:1
+Device.controller.smart_digital_io_config[SIOD1].dout1_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].dout2_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].dout2_attribute = DOUT:2
+Device.controller.smart_digital_io_config[SIOD1].dout2_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].dout3_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].dout3_attribute = DOUT:3
+Device.controller.smart_digital_io_config[SIOD1].dout3_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].dout4_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].dout4_attribute = DOUT:4
+Device.controller.smart_digital_io_config[SIOD1].dout4_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].dout5_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].dout5_attribute = DOUT:5
+Device.controller.smart_digital_io_config[SIOD1].dout5_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].dout6_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].dout6_attribute = DOUT:6
+Device.controller.smart_digital_io_config[SIOD1].dout6_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].dout7_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].dout7_attribute = DOUT:7
+Device.controller.smart_digital_io_config[SIOD1].dout7_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].dout8_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD1].dout8_attribute = DOUT:8
+Device.controller.smart_digital_io_config[SIOD1].dout8_transformation = 
+Device.controller.smart_digital_io_config[SIOD1].connection_timeout = 0
+Device.controller.smart_digital_io_config[SIOD1].controller_mode = NORMAL
+# ACTION: Device.controller.smart_digital_io_config[SIOD1].manual_get_value = 0
+# ACTION: Device.controller.smart_digital_io_config[SIOD1].manual_set_value = dout1
+# ACTION: Device.controller.smart_digital_io_config[SIOD1].read_command = 0
+# ACTION: Device.controller.smart_digital_io_config[SIOD1].write_command = 0
+
+# set_running_device_controller_smart_digital_io_config.ms
+# created from running config
+# microscript to configure Device.controller.smart_digital_io_config values
+# generation device: 00:60:A7:0A:8B:DE
+# generation date  : 2025-07-15 10:38:10
+Device.controller.smart_digital_io_config[*].name = SIOD2
+Device.controller.smart_digital_io_config[SIOD2].din1_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din1_attribute = DIN:1
+Device.controller.smart_digital_io_config[SIOD2].din1_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din1_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din2_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din2_attribute = DIN:2
+Device.controller.smart_digital_io_config[SIOD2].din2_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din2_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din3_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din3_attribute = DIN:3
+Device.controller.smart_digital_io_config[SIOD2].din3_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din3_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din4_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din4_attribute = DIN:4
+Device.controller.smart_digital_io_config[SIOD2].din4_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din4_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din5_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din5_attribute = DIN:5
+Device.controller.smart_digital_io_config[SIOD2].din5_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din5_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din6_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din6_attribute = DIN:6
+Device.controller.smart_digital_io_config[SIOD2].din6_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din6_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din7_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din7_attribute = DIN:7
+Device.controller.smart_digital_io_config[SIOD2].din7_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din7_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din8_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din8_attribute = DIN:8
+Device.controller.smart_digital_io_config[SIOD2].din8_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din8_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din9_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din9_attribute = DIN:9
+Device.controller.smart_digital_io_config[SIOD2].din9_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din9_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].din10_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].din10_attribute = DIN:10
+Device.controller.smart_digital_io_config[SIOD2].din10_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].din10_debounce_time = 100
+Device.controller.smart_digital_io_config[SIOD2].dout1_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].dout1_attribute = DOUT:1
+Device.controller.smart_digital_io_config[SIOD2].dout1_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].dout2_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].dout2_attribute = DOUT:2
+Device.controller.smart_digital_io_config[SIOD2].dout2_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].dout3_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].dout3_attribute = DOUT:3
+Device.controller.smart_digital_io_config[SIOD2].dout3_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].dout4_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].dout4_attribute = DOUT:4
+Device.controller.smart_digital_io_config[SIOD2].dout4_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].dout5_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].dout5_attribute = DOUT:5
+Device.controller.smart_digital_io_config[SIOD2].dout5_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].dout6_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].dout6_attribute = DOUT:6
+Device.controller.smart_digital_io_config[SIOD2].dout6_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].dout7_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].dout7_attribute = DOUT:7
+Device.controller.smart_digital_io_config[SIOD2].dout7_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].dout8_mode = Enabled
+Device.controller.smart_digital_io_config[SIOD2].dout8_attribute = DOUT:8
+Device.controller.smart_digital_io_config[SIOD2].dout8_transformation = 
+Device.controller.smart_digital_io_config[SIOD2].connection_timeout = 0
+Device.controller.smart_digital_io_config[SIOD2].controller_mode = NORMAL
+# ACTION: Device.controller.smart_digital_io_config[SIOD2].manual_get_value = 0
+# ACTION: Device.controller.smart_digital_io_config[SIOD2].manual_set_value = dout1
+# ACTION: Device.controller.smart_digital_io_config[SIOD2].read_command = 0
+# ACTION: Device.controller.smart_digital_io_config[SIOD2].write_command = 0
+
+# set_running_device_controller_smart_io_config.ms
+# created from running config
+# microscript to configure Device.controller.smart_io_config values
+# generation device: 00:60:A7:0A:8C:0F
+# generation date  : 2025-07-18 13:19:38
+
+Device.controller.smart_io_config[*].name =
+
+Device.controller.smart_io_config[*].name = SIOC
+Device.controller.smart_io_config[SIOC].pt1_attribute = TEMP:1
+Device.controller.smart_io_config[SIOC].pt1_sensor_type = PT1000_CELSIUS
+Device.controller.smart_io_config[SIOC].pt1_num_averaged_values = 10
+Device.controller.smart_io_config[SIOC].pt1_filter_time = 1
+Device.controller.smart_io_config[SIOC].pt1_transformation = 
+Device.controller.smart_io_config[SIOC].pt2_attribute = TEMP:2
+Device.controller.smart_io_config[SIOC].pt2_sensor_type = PT1000_CELSIUS
+Device.controller.smart_io_config[SIOC].pt2_num_averaged_values = 10
+Device.controller.smart_io_config[SIOC].pt2_filter_time = 1
+Device.controller.smart_io_config[SIOC].pt2_transformation = 
+Device.controller.smart_io_config[SIOC].ain1_attribute = AIN:1
+Device.controller.smart_io_config[SIOC].ain1_sensor_type = MILLIAMP_0_TO_20
+Device.controller.smart_io_config[SIOC].ain1_raw_min = 0
+Device.controller.smart_io_config[SIOC].ain1_raw_max = 4095
+Device.controller.smart_io_config[SIOC].ain1_scaled_min = 0
+Device.controller.smart_io_config[SIOC].ain1_scaled_max = 100
+Device.controller.smart_io_config[SIOC].ain1_num_averaged_values = 10
+Device.controller.smart_io_config[SIOC].ain1_filter_time = 0
+Device.controller.smart_io_config[SIOC].ain1_update_delta = 0
+Device.controller.smart_io_config[SIOC].ain1_transformation = 
+Device.controller.smart_io_config[SIOC].ain2_attribute = AIN:2
+Device.controller.smart_io_config[SIOC].ain2_sensor_type = MILLIAMP_0_TO_20
+Device.controller.smart_io_config[SIOC].ain2_raw_min = 0
+Device.controller.smart_io_config[SIOC].ain2_raw_max = 4095
+Device.controller.smart_io_config[SIOC].ain2_scaled_min = 0
+Device.controller.smart_io_config[SIOC].ain2_scaled_max = 100
+Device.controller.smart_io_config[SIOC].ain2_num_averaged_values = 10
+Device.controller.smart_io_config[SIOC].ain2_filter_time = 0
+Device.controller.smart_io_config[SIOC].ain2_update_delta = 0
+Device.controller.smart_io_config[SIOC].ain2_transformation =
+Device.controller.smart_io_config[SIOC].ain3_attribute = AIN:3
+Device.controller.smart_io_config[SIOC].ain3_sensor_type = MILLIAMP_0_TO_20
+Device.controller.smart_io_config[SIOC].ain3_raw_min = 0
+Device.controller.smart_io_config[SIOC].ain3_raw_max = 4095
+Device.controller.smart_io_config[SIOC].ain3_scaled_min = 0
+Device.controller.smart_io_config[SIOC].ain3_scaled_max = 100
+Device.controller.smart_io_config[SIOC].ain3_num_averaged_values = 10
+Device.controller.smart_io_config[SIOC].ain3_filter_time = 0
+Device.controller.smart_io_config[SIOC].ain3_update_delta = 0
+Device.controller.smart_io_config[SIOC].ain3_transformation =
+Device.controller.smart_io_config[SIOC].ain4_attribute = AIN:4
+Device.controller.smart_io_config[SIOC].ain4_sensor_type = MILLIAMP_0_TO_20
+Device.controller.smart_io_config[SIOC].ain4_raw_min = 0
+Device.controller.smart_io_config[SIOC].ain4_raw_max = 4095
+Device.controller.smart_io_config[SIOC].ain4_scaled_min = 0
+Device.controller.smart_io_config[SIOC].ain4_scaled_max = 100
+Device.controller.smart_io_config[SIOC].ain4_num_averaged_values = 10
+Device.controller.smart_io_config[SIOC].ain4_filter_time = 0
+Device.controller.smart_io_config[SIOC].ain4_update_delta = 0
+Device.controller.smart_io_config[SIOC].ain4_transformation =
+Device.controller.smart_io_config[SIOC].din1_mode = ENABLED
+Device.controller.smart_io_config[SIOC].din1_attribute = DIN:1
+Device.controller.smart_io_config[SIOC].din1_transformation = 
+Device.controller.smart_io_config[SIOC].din1_mode = ENABLED
+Device.controller.smart_io_config[SIOC].din2_attribute = DIN:2
+Device.controller.smart_io_config[SIOC].din2_transformation = 
+Device.controller.smart_io_config[SIOC].din2_mode = ENABLED
+Device.controller.smart_io_config[SIOC].din3_attribute = DIN:3
+Device.controller.smart_io_config[SIOC].din3_transformation = 
+Device.controller.smart_io_config[SIOC].din4_mode = ENABLED
+Device.controller.smart_io_config[SIOC].din4_attribute = DIN:4
+Device.controller.smart_io_config[SIOC].din4_transformation = 
+Device.controller.smart_io_config[SIOC].aout1_attribute = AOUT:1
+Device.controller.smart_io_config[SIOC].aout1_mode = MILLIAMP_0_TO_20
+Device.controller.smart_io_config[SIOC].aout1_transformation = 
+Device.controller.smart_io_config[SIOC].aout1_raw_min = 0
+Device.controller.smart_io_config[SIOC].aout1_raw_max = 4095
+Device.controller.smart_io_config[SIOC].aout1_scaled_min = 0
+Device.controller.smart_io_config[SIOC].aout1_scaled_max = 100
+Device.controller.smart_io_config[SIOC].aout1_attribute = AOUT:2
+Device.controller.smart_io_config[SIOC].aout2_mode = MILLIAMP_0_TO_20
+Device.controller.smart_io_config[SIOC].aout2_transformation = 
+Device.controller.smart_io_config[SIOC].aout2_raw_min = 0
+Device.controller.smart_io_config[SIOC].aout2_raw_max = 4095
+Device.controller.smart_io_config[SIOC].aout2_scaled_min = 0
+Device.controller.smart_io_config[SIOC].aout2_scaled_max = 100
+Device.controller.smart_io_config[SIOC].dout1_attribute = DOUT:1
+Device.controller.smart_io_config[SIOC].dout1_mode = DIGITAL
+Device.controller.smart_io_config[SIOC].dout1_pwm_frequency = 1
+Device.controller.smart_io_config[SIOC].dout1_transformation = 
+Device.controller.smart_io_config[SIOC].dout2_attribute = DOUT:2
+Device.controller.smart_io_config[SIOC].dout2_mode = DIGITAL
+Device.controller.smart_io_config[SIOC].dout2_pwm_frequency = 1
+Device.controller.smart_io_config[SIOC].dout2_transformation = 
+Device.controller.smart_io_config[SIOC].connection_timeout = 0
+Device.controller.smart_io_config[SIOC].controller_mode = NORMAL
+# ACTION: Device.controller.smart_io_config[SIOC].manual_get_input = 0
+# ACTION: Device.controller.smart_io_config[SIOC].manual_set_output = 0
+# ACTION: Device.controller.smart_io_config[SIOC].read_command = 0
+# ACTION: Device.controller.smart_io_config[SIOC].write_command = 0
+
+# set_device_smartoffice.ms
+# microscript to configure basic Device.smartoffice values
+# generation device: 00:60:A7:0A:8C:0F
+# generation date  : 2025-07-18 13:32:08
+Device.smartoffice.enable_smart_office = Enabled
+
+# set_running_device_smartoffice_device_config.ms
+# created from running config
+# microscript to configure Device.smartoffice.device_config values
+# generation device: 00:60:A7:0A:8C:0F
+# generation date  : 2025-07-18 13:33:19
+
+Device.smartoffice.device_config[*].device_name =
+
+Device.smartoffice.device_config[*].device_name = SIOC
+Device.smartoffice.device_config[SIOC].location = 
+Device.smartoffice.device_config[SIOC].latitude = 
+Device.smartoffice.device_config[SIOC].longitude = 
+Device.smartoffice.device_config[SIOC].altitude = 
+Device.smartoffice.device_config[SIOC].placement = UNSET
+Device.smartoffice.device_config[SIOC].product_type = SMART_IO_CONTROLLER
+Device.smartoffice.device_config[SIOC].device_id = 
+Device.smartoffice.device_config[SIOC].network_address = 
+Device.smartoffice.device_config[SIOC].additional_parameter = 
+Device.smartoffice.device_config[SIOC].network_failure_action = KEEP_CURRENT
+# ACTION: Device.smartoffice.device_config[SIOC].identify = 0
+# ACTION: Device.smartoffice.device_config[SIOC].restart = 0
+# ACTION: Device.smartoffice.device_config[SIOC].calibrate = 0
+# ACTION: Device.smartoffice.device_config[SIOC].pair = 0
+# ACTION: Device.smartoffice.device_config[SIOC].unpair = 0
+# ACTION: Device.smartoffice.device_config[SIOC].update_firmware = 0
+# ACTION: Device.smartoffice.device_config[SIOC].test = 0
+Device.smartoffice.device_config[*].device_name = SIOD1
+Device.smartoffice.device_config[SIOD1].location = 
+Device.smartoffice.device_config[SIOD1].latitude = 
+Device.smartoffice.device_config[SIOD1].longitude = 
+Device.smartoffice.device_config[SIOD1].altitude = 
+Device.smartoffice.device_config[SIOD1].placement = UNSET
+Device.smartoffice.device_config[SIOD1].product_type = DIGITAL_IO_CONTROLLER
+Device.smartoffice.device_config[SIOD1].device_id = 
+Device.smartoffice.device_config[SIOD1].network_address = 
+Device.smartoffice.device_config[SIOD1].additional_parameter = 
+Device.smartoffice.device_config[SIOD1].network_failure_action = KEEP_CURRENT
+# ACTION: Device.smartoffice.device_config[SIOD1].identify = 
+# ACTION: Device.smartoffice.device_config[SIOD1].restart = 
+# ACTION: Device.smartoffice.device_config[SIOD1].calibrate = 
+# ACTION: Device.smartoffice.device_config[SIOD1].pair = 
+# ACTION: Device.smartoffice.device_config[SIOD1].unpair = 
+# ACTION: Device.smartoffice.device_config[SIOD1].update_firmware = 
+# ACTION: Device.smartoffice.device_config[SIOD1].test = 
+Device.smartoffice.device_config[*].device_name = SIOD2
+Device.smartoffice.device_config[SIOD2].location = 
+Device.smartoffice.device_config[SIOD2].latitude = 
+Device.smartoffice.device_config[SIOD2].longitude = 
+Device.smartoffice.device_config[SIOD2].altitude = 
+Device.smartoffice.device_config[SIOD2].placement = UNSET
+Device.smartoffice.device_config[SIOD2].product_type = DIGITAL_IO_CONTROLLER
+Device.smartoffice.device_config[SIOD2].device_id = 
+Device.smartoffice.device_config[SIOD2].network_address = 
+Device.smartoffice.device_config[SIOD2].additional_parameter = 
+Device.smartoffice.device_config[SIOD2].network_failure_action = KEEP_CURRENT
+# ACTION: Device.smartoffice.device_config[SIOD2].identify = 
+# ACTION: Device.smartoffice.device_config[SIOD2].restart = 
+# ACTION: Device.smartoffice.device_config[SIOD2].calibrate = 
+# ACTION: Device.smartoffice.device_config[SIOD2].pair = 
+# ACTION: Device.smartoffice.device_config[SIOD2].unpair = 
+# ACTION: Device.smartoffice.device_config[SIOD2].update_firmware = 
+# ACTION: Device.smartoffice.device_config[SIOD2].test = 
+
+Management.web.web_timeout = 0
+Management.cli.inactivity_timeout = 0
+
+# set_running_management_logging_history_config.ms
+# created from running config
+# microscript to configure Management.logging.history_config values
+# generation device: 00:60:A7:0A:8C:0F
+# generation date  : 2025-07-23 13:44:44
+
+Management.logging.history_config[*].name =
+
+Management.logging.history_config[*].name = MuxChan0
+Management.logging.history_config[MuxChan0].record_mode = ENABLED
+Management.logging.history_config[MuxChan0].history_file_mode = DAILY
+Management.logging.history_config[MuxChan0].dotstring = $MuxChan0
+Management.logging.history_config[MuxChan0].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan0].restart = 0
+Management.logging.history_config[*].name = MuxChan1
+Management.logging.history_config[MuxChan1].record_mode = ENABLED
+Management.logging.history_config[MuxChan1].history_file_mode = DAILY
+Management.logging.history_config[MuxChan1].dotstring = $MuxChan1
+Management.logging.history_config[MuxChan1].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan1].restart = 0
+Management.logging.history_config[*].name = MuxChan2
+Management.logging.history_config[MuxChan2].record_mode = ENABLED
+Management.logging.history_config[MuxChan2].history_file_mode = DAILY
+Management.logging.history_config[MuxChan2].dotstring = $MuxChan2
+Management.logging.history_config[MuxChan2].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan2].restart = 0
+Management.logging.history_config[*].name = MuxChan3
+Management.logging.history_config[MuxChan3].record_mode = ENABLED
+Management.logging.history_config[MuxChan3].history_file_mode = DAILY
+Management.logging.history_config[MuxChan3].dotstring = $MuxChan3
+Management.logging.history_config[MuxChan3].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan3].restart = 0
+Management.logging.history_config[*].name = MuxChan4
+Management.logging.history_config[MuxChan4].record_mode = ENABLED
+Management.logging.history_config[MuxChan4].history_file_mode = DAILY
+Management.logging.history_config[MuxChan4].dotstring = $MuxChan4
+Management.logging.history_config[MuxChan4].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan4].restart = 0
+Management.logging.history_config[*].name = MuxChan5
+Management.logging.history_config[MuxChan5].record_mode = ENABLED
+Management.logging.history_config[MuxChan5].history_file_mode = DAILY
+Management.logging.history_config[MuxChan5].dotstring = $MuxChan5
+Management.logging.history_config[MuxChan5].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan5].restart = 0
+Management.logging.history_config[*].name = MuxChan6
+Management.logging.history_config[MuxChan6].record_mode = ENABLED
+Management.logging.history_config[MuxChan6].history_file_mode = DAILY
+Management.logging.history_config[MuxChan6].dotstring = $MuxChan6
+Management.logging.history_config[MuxChan6].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan6].restart = 0
+Management.logging.history_config[*].name = MuxChan7
+Management.logging.history_config[MuxChan7].record_mode = ENABLED
+Management.logging.history_config[MuxChan7].history_file_mode = DAILY
+Management.logging.history_config[MuxChan7].dotstring = $MuxChan7
+Management.logging.history_config[MuxChan7].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan7].restart = 0
+Management.logging.history_config[*].name = MuxChan8
+Management.logging.history_config[MuxChan8].record_mode = ENABLED
+Management.logging.history_config[MuxChan8].history_file_mode = DAILY
+Management.logging.history_config[MuxChan8].dotstring = $MuxChan8
+Management.logging.history_config[MuxChan8].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan8].restart = 0
+Management.logging.history_config[*].name = MuxChan9
+Management.logging.history_config[MuxChan9].record_mode = ENABLED
+Management.logging.history_config[MuxChan9].history_file_mode = DAILY
+Management.logging.history_config[MuxChan9].dotstring = $MuxChan9
+Management.logging.history_config[MuxChan9].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan9].restart = 0
+Management.logging.history_config[*].name = MuxChan10
+Management.logging.history_config[MuxChan10].record_mode = ENABLED
+Management.logging.history_config[MuxChan10].history_file_mode = DAILY
+Management.logging.history_config[MuxChan10].dotstring = $MuxChan10
+Management.logging.history_config[MuxChan10].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan10].restart = 0
+Management.logging.history_config[*].name = MuxChan11
+Management.logging.history_config[MuxChan11].record_mode = ENABLED
+Management.logging.history_config[MuxChan11].history_file_mode = DAILY
+Management.logging.history_config[MuxChan11].dotstring = $MuxChan11
+Management.logging.history_config[MuxChan11].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan11].restart = 0
+Management.logging.history_config[*].name = MuxChan12
+Management.logging.history_config[MuxChan12].record_mode = ENABLED
+Management.logging.history_config[MuxChan12].history_file_mode = DAILY
+Management.logging.history_config[MuxChan12].dotstring = $MuxChan12
+Management.logging.history_config[MuxChan12].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan12].restart = 0
+Management.logging.history_config[*].name = MuxChan13
+Management.logging.history_config[MuxChan13].record_mode = ENABLED
+Management.logging.history_config[MuxChan13].history_file_mode = DAILY
+Management.logging.history_config[MuxChan13].dotstring = $MuxChan13
+Management.logging.history_config[MuxChan13].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan13].restart = 0
+Management.logging.history_config[*].name = MuxChan14
+Management.logging.history_config[MuxChan14].record_mode = ENABLED
+Management.logging.history_config[MuxChan14].history_file_mode = DAILY
+Management.logging.history_config[MuxChan14].dotstring = $MuxChan14
+Management.logging.history_config[MuxChan14].precision = HUNDREDFOLD
+# ACTION: Management.logging.history_config[MuxChan14].restart = 0

@@ -1,0 +1,215 @@
+# StateMachine
+# admin, last change: 2025-07-24 08:43:12
+
+# Pflanzenbewässerung Statemachine für MICROSENS G6
+
+# Persistente Variablen für Konfiguration
+persistent $num_groups = 5          # Anzahl der Pflanzengruppen (max 8)
+persistent $num_measurements = 7    # Gesamtanzahl Messungen (max 16)
+persistent $group_used = "1,1,1,1,1,0,0,0"      # Welche Gruppen aktiv sind (CSV, max 8)
+persistent $meas_per_group = "2,1,2,2,2,0,0,0"  # Wieviele Messungen pro Gruppe (CSV, max 8)
+
+# Arrays (Strings als CSV für microScript, später mit extract verwenden)
+persistent $raw_values = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"      # Raw ADC Werte aller Messkanäle
+persistent $group_means = "0,0,0,0,0,0,0,0"                     # Mittelwerte pro Gruppe
+persistent $valve_status = "0,0,0,0,0,0,0,0"                    # Status aller Ventile
+
+# Systemzustand
+persistent $state = 0           # Aktueller State
+persistent $step = 0            # Hilfsvariable für Schritt im State
+persistent $timer_id = 1        # Timer-ID für Wiederanlauf
+persistent $mux_channel = 0     # Aktueller Multiplexer-Kanal (0..15)
+persistent $curr_group = 0      # Aktuelle Gruppe (0..7)
+persistent $curr_meas = 0       # Aktuelle Messung (0..15)
+persistent $manual_action = 0   # Manueller Eingriff (z.B. per GUI)
+
+# ---- Einstieg ----
+# Diese Routine wird per "start timer" wiederholt aufgerufen
+sub MainLoop
+    echo console on
+    if $state = 0
+        gosub Init
+    elseif $state = 1
+        gosub MuxAdvance
+    elseif $state = 2
+        gosub Measure
+    elseif $state = 3
+        gosub CalcMeans
+    elseif $state = 4
+        gosub CheckWater
+    elseif $state = 5
+        gosub ManualOverride
+    elseif $state = 99
+        gosub ErrorState
+    endif
+    # Nach jedem Schritt Timer neu starten (nicht warten!)
+    start timer "Irrigation" in "2s" {$filename}:MainLoop
+    endsub
+endsub
+
+sub Init
+    console "Init: Reset States"
+    $mux_channel = 0
+    $curr_group = 0
+    $curr_meas = 0
+    $state = 1
+    endsub
+endsub
+
+sub MuxAdvance
+    console "Schalte Multiplexer auf Kanal: " $mux_channel
+    # Multiplexer-SIO umschalten (hier exemplarisch: SIO_MUX_CHANNEL)
+    write smartdevice $mux_channel= SIO_MUX_CHANNEL value
+    $state = 2
+    endsub
+endsub
+
+sub Measure
+    console "Starte Messung auf Kanal: " $mux_channel
+    # ADC lesen und Wert in Array schreiben (SIO_ADC_x)
+    read smartdevice $meas_value= SIO_ADC value
+    # Schreibe Wert an richtige Stelle im $raw_values (CSV-String)
+    gosub WriteRawValue $mux_channel $meas_value
+    # Prüfe, ob noch weitere Messkanäle
+    if $mux_channel < ($num_measurements - 1)
+        $mux_channel = $mux_channel + 1
+        $state = 1     # Weiter zum nächsten Multiplexerkanal
+    else
+        $state = 3     # Alle Messungen fertig, Mittelwerte bilden
+    endif
+    endsub
+endsub
+
+sub WriteRawValue
+    # Parameter: $chan_idx, $val
+    # Schreibe $val an Stelle $chan_idx ins $raw_values-CSV
+    var $csv_out
+    var $i = 0
+    for $i=0 to ($num_measurements - 1)
+        if $i = $chan_idx
+            append $csv_out $val
+        else
+            extract $tmp $raw_values $i ","
+            append $csv_out $tmp
+        endif
+        if $i < ($num_measurements - 1)
+            append $csv_out ","
+        endif
+    next
+    $raw_values = $csv_out
+    endsub
+endsub
+
+sub CalcMeans
+    # Pro Gruppe Mittelwert bilden
+    var $g, $m, $anz_meas, $sum, $idx, $mean, $tmpval
+    for $g = 0 to ($num_groups - 1)
+        extract $used $group_used $g ","
+        if $used = 1
+            extract $anz_meas $meas_per_group $g ","
+            $sum = 0
+            for $m = 0 to ($anz_meas - 1)
+                $idx = $g * 2 + $m     # Annahme: Messungen stehen sortiert nach Gruppe
+                extract $tmpval $raw_values $idx ","
+                $sum = $sum + $tmpval
+            next
+            $mean = $sum / $anz_meas
+            gosub WriteMean $g $mean
+        else
+            gosub WriteMean $g 0
+        endif
+    next
+    $state = 4
+    endsub
+endsub
+
+sub WriteMean
+    # Schreibe $mean an Stelle $g ins $group_means (CSV)
+    var $csv_out
+    var $i = 0
+    for $i=0 to ($num_groups - 1)
+        if $i = $g
+            append $csv_out $mean
+        else
+            extract $tmp $group_means $i ","
+            append $csv_out $tmp
+        endif
+        if $i < ($num_groups - 1)
+            append $csv_out ","
+        endif
+    next
+    $group_means = $csv_out
+    endsub
+endsub
+
+sub CheckWater
+    # Prüfe Mittelwerte, steuere Ventile (hier Logik beispielhaft)
+    var $g, $mean, $thresh
+    $thresh = 3500    # Schwelle, ab der gegossen wird (kann per GUI gesetzt werden)
+    for $g = 0 to ($num_groups - 1)
+        extract $used $group_used $g ","
+        extract $mean $group_means $g ","
+        if $used = 1
+            if $mean < $thresh
+                write smartdevice 1 = SIO_VALVE_$g state
+                gosub WriteValveState $g 1
+            else
+                write smartdevice 0 = SIO_VALVE_$g state
+                gosub WriteValveState $g 0
+            endif
+        else
+            write smartdevice 0 = SIO_VALVE_$g state
+            gosub WriteValveState $g 0
+        endif
+    next
+    $state = 5
+    endsub
+endsub
+
+sub WriteValveState
+    # Schreibe $val an Stelle $g ins $valve_status (CSV)
+    var $csv_out
+    var $i = 0
+    for $i=0 to ($num_groups - 1)
+        if $i = $g
+            append $csv_out $val
+        else
+            extract $tmp $valve_status $i ","
+            append $csv_out $tmp
+        endif
+        if $i < ($num_groups - 1)
+            append $csv_out ","
+        endif
+    next
+    $valve_status = $csv_out
+    endsub
+endsub
+
+sub ManualOverride
+    # Manueller Eingriff (GUI liest/schreibt $manual_action, 1 = Gießen, 2 = Stop, etc.)
+    if $manual_action = 1
+        # Alle Ventile öffnen
+        for $g = 0 to ($num_groups - 1)
+            write smartdevice 1 = SIO_VALVE_$g state
+            gosub WriteValveState $g 1
+        next
+        $manual_action = 0    # Quittieren
+    elseif $manual_action = 2
+        # Alle Ventile schließen
+        for $g = 0 to ($num_groups - 1)
+            write smartdevice 0 = SIO_VALVE_$g state
+            gosub WriteValveState $g 0
+        next
+        $manual_action = 0
+    endif
+    $state = 0     # Wieder von vorne
+    endsub
+endsub
+
+sub ErrorState
+    console "Fehlerzustand erreicht. Manuelle Kontrolle nötig!"
+    endsub
+endsub
+
+# ---- Initialen Timer anlegen, wenn Script neu geladen wird ----
+start timer "Irrigation" in "2s" {$filename}:MainLoop

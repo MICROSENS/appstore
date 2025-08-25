@@ -1,0 +1,27 @@
+# SetGuiElementValue
+# admin, last change: 2025-03-25 13:23:41
+
+sub main $Element $Min $Max
+  
+  # Anpassen der Grenzen (Aufrunden und auf Nullline legen)
+  if $Min >0 then
+    $Min=0
+  # else
+  # Round to nearst 10
+  endif
+
+  if $Max <0 then
+    $Max=0
+  # else
+  # Round to nearst 10
+  endif
+
+  if $Min=0 and $Max=0 then
+    $Min=0
+    $Max=100
+  endif
+
+  append $Value=$Min + ", " + $Max
+  Management.web.gui_element[{$Element}].value = {$Value}
+
+endSub

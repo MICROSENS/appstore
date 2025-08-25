@@ -1,0 +1,22 @@
+# GetTableExtremes
+# admin, last change: 2025-03-25 13:24:12
+
+sub main $Table
+  $average = 0.0
+  $i = 0
+  Management.logging.history_records[{$Table}].last_day %
+  string $ValueList "{$cli}"
+ 
+  $Max=0
+  $Min=100
+  loop $Val for each item of list $ValueList
+      intval $CheckVal $Val
+      # dump $CheckVal
+      if $CheckVal>$Max then $Max=$CheckVal
+      if $CheckVal<$Min then $Min=$CheckVal
+      $average = $average + $CheckVal
+      $i = $i + 1
+  endloop
+  $average = $average / $i
+
+endsub $Min $Max $average

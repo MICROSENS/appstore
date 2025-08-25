@@ -1,0 +1,231 @@
+# StateMachine
+# admin, last change: 2025-07-24 08:43:12
+
+# --- IO Geruetst ---
+# - Outputs -
+# SIOD1:1:DOUT - MUX S0
+# SIOD1:2:DOUT - MUX S1
+# SIOD1:3:DOUT - MUX S2
+# SIOD1:4:DOUT - MUX S3
+# SIOD1:5:DOUT - Traffic Light Red
+# SIOD1:6:DOUT - Traffic Light Yellow
+# SIOD1:7:DOUT - Traffic Light Green
+# SIOD1:8:DOUT - Traffic Light Blue
+
+# SIOD2:1:DOUT - Valve 1
+# SIOD2:2:DOUT - Valve 2
+# SIOD2:3:DOUT - Valve 3
+# SIOD2:4:DOUT - Valve 4
+# SIOD2:5:DOUT - Valve 5
+# SIOD2:6:DOUT - Pump
+# SIOD2:7:DOUT - 
+# SIOD2:8:DOUT - 
+
+# SIOC:1:DOUT - 
+# SIOC:2:DOUT - 
+# SIOC:1:AOUT - 
+# SIOC:2:AOUT - 
+
+# - Inputs -
+# SIOD1:1:DIN - Kill Switch
+# SIOD1:2:DIN -
+# SIOD1:3:DIN -
+# SIOD1:4:DIN -
+# SIOD1:5:DIN -
+# SIOD1:6:DIN -
+# SIOD1:7:DIN -
+# SIOD1:8:DIN -
+
+# SIOD2:1:DIN -
+# SIOD2:2:DIN -
+# SIOD2:3:DIN -
+# SIOD2:4:DIN -
+# SIOD2:5:DIN -
+# SIOD2:6:DIN -
+# SIOD2:7:DIN -
+# SIOD2:8:DIN -
+
+# SIOC:1:DIN -
+# SIOC:2:DIN -
+# SIOC:1:AIN - MUX Signal - 4..20 mA ( 0 - 100% )
+# SIOC:2:AIN -
+
+# Persistent Variables
+persistent $state = 0
+persistent $counter = 0
+persistent $OpenValve1 = 0
+persistent $OpenValve2 = 0
+persistent $OpenValve3 = 0
+persistent $OpenValve4 = 0
+persistent $OpenValve5 = 0
+persistent $OpenLimit = 30
+persistent $Uptime = 0
+
+# volatile global Variables
+global $SIOD1="SIOD1"
+global $SIOD2="SIOD2"
+global $SIOC1="SIOC"
+global $DOUT="DOUT"
+global $DIN="DIN"
+global $AOUT="AOUT"
+global $AIN="AIN"
+global $null=0
+global $eins=1
+
+stop timer "Irrigation"
+
+echo console on
+
+select $state
+case 0
+    $Uptime = $Uptime + 1
+    write sensor $Uptime "StateMachine.1.Uptime"
+    gosub INIT
+case 5
+    $Uptime = $Uptime + 1
+    write sensor $Uptime "StateMachine.1.Uptime"
+    # Check Smart Devices - Wait for state normal!
+    gosub wait
+case 10
+    $Uptime = $Uptime + 1
+    write sensor $Uptime "StateMachine.1.Uptime"
+    gosub ReadTabels
+case 20
+    $Uptime = $Uptime + 1
+    write sensor $Uptime "StateMachine.1.Uptime"
+    gosub IDEL
+case 30
+    $Uptime = $Uptime + 1
+    write sensor $Uptime "StateMachine.1.Uptime"
+    gosub Pumping
+case 99
+    $Uptime = $Uptime + 1
+    write sensor $Uptime "StateMachine.1.Uptime"
+    gosub KILL
+case *
+    $Uptime = 0
+    write sensor $Uptime "StateMachine.1.Uptime"
+    $state = 0
+endselect
+
+# Nach jedem Schritt Timer neu starten (nicht warten!)
+if $state != 99
+    start timer "Irrigation" in "2s" {$filename}
+else
+    console "done"
+    $state = 0
+endif
+
+# --- Statenaschine States ---
+sub INIT
+    console "Step INIT - 0: Restart Histories"
+    # Neustart nur bei Neuinstalltion - Sonst sind nach Strom weg auch die Daten weg.
+    Management.logging.history_config[MuxChan0].restart = 1
+    Management.logging.history_config[MuxChan1].restart = 1
+    Management.logging.history_config[MuxChan2].restart = 1
+    Management.logging.history_config[MuxChan3].restart = 1
+    Management.logging.history_config[MuxChan4].restart = 1
+    Management.logging.history_config[MuxChan5].restart = 1
+    Management.logging.history_config[MuxChan6].restart = 1
+    Management.logging.history_config[MuxChan7].restart = 1
+    Management.logging.history_config[MuxChan8].restart = 1
+
+    # check Smart Devices - otherwise got ot Step 5 and wait for devices
+    # -> If SIOCD1 ok -> Start Read_Sensor!!!
+
+    console "Step INIT - 0: Start Read_Sensor"
+    start timer "readwrite" in "1s" Read_Sensor     # Asynchroner Ablauf der Messungen
+    register sensor "StateMachine.1.Uptime" 0 "cycles"
+    # Rote Leuchte auf 1 - Relais invertiert - LED aus!
+    # -> Kein SIOC -> LED an -> Fehler im System
+    write $eins actor  "{$SIOD1}:5:{$DOUT}"
+    $state = 10
+    $counter = 10
+    console "Step INIT - 0 -> Go Step " $state
+endsub
+
+sub ReadTabels
+    console "Step ReadTabels - 10: Adjust Diagramm Limits"
+
+    gosub AdjustDiagramLimits:main "MuxChan0" "DIA_Hum11"
+    gosub AdjustDiagramLimits:main "MuxChan1" "DIA_Hum21"
+    gosub AdjustDiagramLimits:main "MuxChan2" "DIA_Hum31"
+    gosub AdjustDiagramLimits:main "MuxChan3" "DIA_Hum41"
+    gosub AdjustDiagramLimits:main "MuxChan4" "DIA_Hum51"
+    gosub AdjustDiagramLimits:main "MuxChan5" "DIA_Hum12"
+    gosub AdjustDiagramLimits:main "MuxChan6" "DIA_Hum22"
+    gosub AdjustDiagramLimits:main "MuxChan7" "DIA_Hum32"
+    gosub AdjustDiagramLimits:main "MuxChan8" "DIA_Hum52"
+    gosub AdjustDiagramLimits:main "Pump" "DIA_Pump"
+    
+    
+    $state = 20
+    console "Step ReadTabels - 10 -> Go Step " $state
+endsub
+
+sub IDEL
+    console "Step IDEL - 20: Read Killbutton"
+    
+    wait 1
+    read sensor $killbutton "SIOD1:1:DIN"
+    if $killbutton
+        $state = 99
+    endif
+    # Zum Testen Einfach Zaehlen - Spaeter dann Uhrzeit abhaengig
+    if $counter > 0
+        console "Step IDEL - 20: Decrease Counter by 1: " $counter
+        $counter = $counter - 1
+    else
+        console "Step IDEL - 20: Counter reatart"
+        $counter = 10
+        $state = 30
+    endif
+    # --- 
+
+    console "Step IDEL - 20 -> Go Step " $state
+endsub
+
+sub KILL
+    console "End of Acting"
+    stop timer "Irrigation"
+    unregister sensor "StateMachine.1.Uptime"
+endsub
+
+sub Pumping
+    console "Step Pumping - 30: Start Pumping - int"
+    gosub Pump "{$SIOD2}:1:{$DOUT}" 1
+    gosub Pump "{$SIOD2}:2:{$DOUT}" 1
+    gosub Pump "{$SIOD2}:3:{$DOUT}" 1
+    gosub Pump "{$SIOD2}:4:{$DOUT}" 1
+    gosub Pump "{$SIOD2}:5:{$DOUT}" 1
+    wait 5
+    console "Step Pumping - 30: Stop Pumping - int"
+    gosub Pump "{$SIOD2}:1:{$DOUT}" 0
+    gosub Pump "{$SIOD2}:2:{$DOUT}" 0
+    gosub Pump "{$SIOD2}:3:{$DOUT}" 0
+    gosub Pump "{$SIOD2}:4:{$DOUT}" 0
+    gosub Pump "{$SIOD2}:5:{$DOUT}" 0
+
+    $state = 20
+    console "Step Pumping - 30 -> Go Step " $state
+
+endsub
+
+# --- Sub Functions
+
+sub Pump $Vavle $Exe
+    console "Subfunction " {$subroutine} " : " $Vavle " " $Exe
+    select $Exe
+    case "0"
+        intval $Exe = 0
+    case "1"
+        intval $Exe = 1
+    case 0, 1
+        tointeger $Exe
+    case *
+        intval $Exe = 0
+    endselect
+    
+    write actor $Exe $Vavle
+    
+endsub
