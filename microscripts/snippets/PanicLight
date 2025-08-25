@@ -5,10 +5,26 @@ echo console on
 gosub PanicButton 1 return $val
 console $val
 
+register sensor "Panic:1:Delay" 0 "sec"
 
 sub PanicButton $Zone
     $groupname = Button_{$Zone}
-    read sensorgroup $val $groupname maximum_value
+    read sensorgroup $val $groupname
+    replace $val=$val "[" "" 1 E
+    replace $val=$val "]" "" 1 E
+    echo console on
+    select $val
+    case "on","On","ON","oN"
+        $val=1
+        console "Val =1 "
+    case "off","Off","oFf","ofF","OFf","OfF","OFF"
+        $val=0
+        console "Val =0 "
+    case *
+        $val=0
+        console "Anything else"
+    endselect
+
     $groupname = ButtonLight_{$Zone}
     write actorgroup $val $groupname
     $on=1000
@@ -23,3 +39,53 @@ sub PanicButton $Zone
         write actorgroup $off Panic_Light
     endif
 endsub $val
+
+sub checkUpTime $Zone
+    persistent $LastUptime = 0
+    register sensor "Panic:1:Delay" 0 "sec"
+    $on=1000
+    $off=0
+
+    stop timer "CheckDevice"
+
+    $Uptime = 0
+
+    read sensor $Uptime "Panic:1:Uptime"
+    replace $Uptime=$Uptime "[" "" 1 E
+    replace $Uptime=$Uptime "]" "" 1 E
+    
+
+
+    read sensor $Delay "Panic:1:Delay"
+
+    if $Uptime > $LastUptime
+        $LastUptime = $Uptime
+        $val = 0
+        write sensor $val "Panic:1:Delay"
+    elseif $Uptime < 10
+        $LastUptime = $Uptime
+        $val = 0
+        write sensor $val "Panic:1:Delay"
+    else
+        read sensor $val "Panic:1:Delay"
+        $val = $val + 1
+        write sensor $val "Panic:1:Delay"
+    endif
+
+    read sensor $val "Panic:1:Delay"
+
+    $groupname = Button_{$Zone}
+    read sensorgroup $Button $groupname
+    replace $Button=$Button "[" "" 1 E
+    replace $Button=$Button "]" "" 1 E
+
+    if $val > 10
+        write actorgroup $off Dimlevel_Zone_1
+        write actorgroup $on Panic_Light
+    elseif  $Button = "OFF"
+        write actorgroup $on Dimlevel_Zone_1
+        write actorgroup $off Panic_Light
+    endif
+
+    start timer "CheckDevice" in "1s" {$filename}:checkUpTime
+endsub
